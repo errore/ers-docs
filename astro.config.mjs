@@ -8,7 +8,6 @@ import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 
 import starlightHeadingBadges from 'starlight-heading-badges'
-import starlightCoolerCredit from 'starlight-cooler-credit'
 import starlightScrollToTop from 'starlight-scroll-to-top'
 import starlightImageZoom from 'starlight-image-zoom'
 
@@ -17,6 +16,9 @@ export default defineConfig({
   site: 'https://ers.errore.ink',
   integrations: [starlight({
     title: 'ERS',
+    editLink: {
+      baseUrl: 'https://github.com/errore/ers-docs/edit/master/',
+    },
     logo: {
       dark: './src/assets/ERS.svg',
       light: './src/assets/ERS-dark.svg',
@@ -28,7 +30,6 @@ export default defineConfig({
     ],
     plugins: [
       starlightHeadingBadges(),
-      starlightCoolerCredit(),
       starlightImageZoom(),
       starlightScrollToTop({
         tooltipText: {
@@ -43,12 +44,13 @@ export default defineConfig({
         svgPath: 'M5 15L12 8L19 15',
       })
     ],
+    defaultLocale: 'zh-cn',
     locales: {
-      root: {
-        label: '简体中文',
-        lang: 'zh-CN', // lang 是 root 语言必须的
-      },
       'zh-cn': {
+        label: '简体中文',
+        lang: 'zh-CN',
+      },
+      'en': {
         label: 'English',
         lang: 'en',
       },

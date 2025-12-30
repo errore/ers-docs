@@ -1,0 +1,455 @@
+---
+import "../styles/global.css";
+const acceptLang = Astro.request.headers.get("accept-language");
+const targetLang = acceptLang?.includes("zh") ? "zh-cn" : "en";
+
+const i18n = {
+  "zh-cn": {
+    gettingStarted: "开始使用",
+    title: "欢迎使用ERS",
+  },
+  en: {
+    gettingStarted: "Getting Started",
+    title: "Welcome to ERS",
+  },
+};
+
+const t = (key: string) => {
+  return i18n[targetLang as keyof typeof i18n][
+    key as keyof (typeof i18n)["zh-cn"]
+  ];
+};
+
+export const prerender = false;
+---
+
+<html lang={targetLang}>
+  <head>
+    <title>{t("title")}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body
+    class="overflow-hidden h-screen w-screen flex items-center justify-center bg-[#8C847D]"
+  >
+    <div class="perspective-container fixed inset-0 flex pointer-events-none">
+      <div
+        id="rotating-plane"
+        class="preserve-3d relative w-full h-full opacity-0"
+      >
+        <!-- 速度线背景层 -->
+        <div
+          id="speed-lines-container"
+          class="absolute inset-0 preserve-3d pointer-events-none"
+          style="z-index: -10;"
+        >
+        </div>
+        <!-- 色带和 Logo 组合 -->
+        <div
+          class="ers-logo absolute inset-0 preserve-3d pointer-events-none flex items-center justify-center"
+        >
+          <div
+            class="relative inset-0 preserve-3d flex flex-row w-full h-35 md:h-45 lg:h-80"
+          >
+            <!-- 色带容器 -->
+            <div
+              class="stripe-container relative w-[45%] md:w-[55%] h-full flex flex-col justify-between preserve-3d"
+            >
+              <div class="relative h-[26%] w-full preserve-3d">
+                <div class="rgb-stripe absolute h-full bg-[#B94747]"></div>
+              </div>
+              <div class="relative h-[26%] w-full preserve-3d">
+                <div class="rgb-stripe absolute h-full bg-[#16a34a]"></div>
+              </div>
+              <div class="relative h-[26%] w-full preserve-3d">
+                <div class="rgb-stripe absolute h-full bg-[#4646B9]"></div>
+              </div>
+            </div>
+
+            <!-- 图片容器：自适应宽度 -->
+            <div
+              class="relative h-full flex items-center justify-start preserve-3d pl-4 md:pl-4 lg:pl-8"
+            >
+              <img
+                class="logo h-full w-auto text-white opacity-0"
+                src="./src/assets/RS.svg"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- 交互 -->
+        <div
+          id=""
+          class="absolute inset-0 preserve-3d pointer-events-none"
+          style="z-index: 10;"
+        >
+          <div
+            id="interactive-layer"
+            class="absolute inset-0 preserve-3d flex flex-col justify-center items-center pointer-events-none"
+            style="z-index: 10;"
+          >
+            <div class="header-section opacity-0 pb-100 md:pb-60 lg:pb-120">
+              <h1
+                class="text-white text-4xl md:text-[60px] font-light tracking-[0.2em] uppercase"
+              >
+                ERS For Everyone
+              </h1>
+            </div>
+            <div class="footer-section opacity-0 pointer-events-auto">
+              <button
+                id="getting-started-button"
+                class="px-8 py-3 border border-white/30 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-all duration-300 tracking-widest uppercase text-lg font-medium"
+              >
+                {t("gettingStarted")}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <style>
+    .perspective-container {
+      perspective: 1500px;
+    }
+    .preserve-3d {
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+    .speed-line {
+      position: absolute;
+      height: 2px; /* 线条高度 */
+      background: rgba(255, 255, 255, 0.2); /* 低饱和度白色，半透明 */
+      border-radius: 2px;
+    }
+
+    .floating-text {
+      mix-blend-mode: overlay; /* 或者 use 'screen' */
+      text-transform: uppercase;
+    }
+  </style>
+
+  <script>
+    import { gsap } from "gsap";
+    import { getRelativeLocaleUrl } from "astro:i18n";
+    function goToDocs() {
+      try {
+        let url = getRelativeLocaleUrl(navigator.language, "getting-started");
+        window.location.href = url;
+      } catch {
+        let url = getRelativeLocaleUrl("en", "getting-started");
+        window.location.href = url;
+      }
+    }
+
+    document
+      .getElementById("getting-started-button")
+      ?.addEventListener("click", goToDocs);
+
+    // 多语言浮动文字列表
+    const floatingTexts = [
+      "Lumen",
+      "Multi-lights",
+      "Shadows",
+      "Blueprints",
+      "Deferred Rendering",
+      "Forward Rendering", // 英文
+      "多光源",
+      "实时阴影",
+      "全局光照",
+      "材质蓝图",
+      "前向渲染",
+      "延迟渲染", // 中文
+      "Luz múltiple",
+      "Sombras",
+      "Planos de construcción",
+      "Renderizado diferido",
+      "Renderizado directo", // 西班牙语
+      "Mehrere Lichter",
+      "Schatten",
+      "Baupläne",
+      "Verzögertes Rendern",
+      "Direktes Rendern", // 德语
+      "Lumière multiple",
+      "Ombres",
+      "Plans",
+      "Rendu différé",
+      "Rendu direct", // 法语
+      "多光源",
+      "リアルタイムシャドウ",
+      "ブループリント",
+      "ディファードレンダリング",
+      "フォワードレンダリング", // 日语
+    ];
+
+    const tl = gsap.timeline();
+    const speedLinesContainer = document.querySelector(
+      "#speed-lines-container"
+    ) as HTMLElement;
+
+    // --- 修改后的速度线生成函数 ---
+    function createSpeedLines(count = 30) {
+      for (let i = 0; i < count; i++) {
+        const line = document.createElement("div");
+        line.className = "speed-line";
+
+        // 设置基础样式（确保这些样式生效）
+        Object.assign(line.style, {
+          position: "absolute",
+          height: gsap.utils.random(20, 60) + "px", // 线条粗细
+          borderRadius: "2px",
+          backgroundColor: "rgba(255, 255, 255, 0.3)", // 浅白色半透明
+          pointerEvents: "none",
+        });
+
+        speedLinesContainer.appendChild(line);
+
+        const width = gsap.utils.random(200, 200); // 长度
+        const top = gsap.utils.random(0, 100) + "%";
+
+        // 初始位置：放置在屏幕最右侧之外
+        gsap.set(line, {
+          width: width,
+          top: top,
+          left: "200%", // 初始在容器右边缘
+          x: 0,
+          opacity: gsap.utils.random(0.2, 0.5),
+        });
+
+        gsap.set(line, {
+          opacity: 0,
+        });
+
+        gsap.to(line, {
+          opacity: gsap.utils.random(0.1, 0.4),
+          duration: 1,
+          ease: "power1.inOut",
+        });
+
+        // 动画：从右往左横穿
+        gsap.to(line, {
+          x: -(window.innerWidth * 2 + width + 200), // 向左位移
+          duration: gsap.utils.random(0.6, 1.2), // 较快的速度感
+          ease: "none",
+          repeat: -1,
+          delay: gsap.utils.random(0, 2),
+        });
+      }
+    }
+
+    // 确保在主时间轴开始前调用
+    createSpeedLines(30);
+
+    function createFloatingTexts(count = 10) {
+      const container = document.querySelector(
+        "#speed-lines-container"
+      ) as HTMLElement;
+
+      for (let i = 0; i < count; i++) {
+        const textSpan = document.createElement("div");
+        textSpan.className = "floating-text";
+        // 随机取词
+        textSpan.innerText =
+          floatingTexts[Math.floor(Math.random() * floatingTexts.length)];
+
+        // 基础样式
+        Object.assign(textSpan.style, {
+          position: "absolute",
+          color: "rgba(255, 255, 255, 0.6)",
+          fontSize: gsap.utils.random(45, 100) + "px",
+          fontWeight: "500",
+          whiteSpace: "nowrap",
+          fontFamily: "sans-serif",
+          letterSpacing: "2px",
+          pointerEvents: "none",
+          zIndex: "20", // 确保在速度线上方
+        });
+
+        container.appendChild(textSpan);
+
+        const startX = window.innerWidth * 1.5 + 100;
+        const top = gsap.utils.random(10, 90) + "%";
+
+        // 初始位置
+        gsap.set(textSpan, {
+          x: startX,
+          y: 0,
+          top: top,
+          opacity: 0,
+          filter: "blur(2px)", // 初始模糊，增加纵深感
+        });
+
+        // 飘动动画：更慢、更有平滑感
+        gsap.to(textSpan, {
+          x: -window.innerWidth - 300,
+          opacity: 0.6,
+          filter: "blur(0px)",
+          duration: gsap.utils.random(8, 10), // 比速度线慢很多
+          ease: "power1.inOut",
+          repeat: -1,
+          delay: gsap.utils.random(0, 10), // 错开出现时间
+          onRepeat: () => {
+            // 每次重复随机更换文字，保持新鲜感
+            textSpan.innerText =
+              floatingTexts[Math.floor(Math.random() * floatingTexts.length)];
+          },
+        });
+
+        // 可选：添加一点点垂直摆动（Sine wave）
+        gsap.to(textSpan, {
+          y: gsap.utils.random(-10, 10),
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+    }
+
+    // 调用
+    createFloatingTexts(20);
+
+    // 初始化动画
+    tl.set("#rotating-plane", {
+      z: 200,
+      y: -100,
+      rotateX: 0,
+      rotateY: 80,
+      rotateZ: -80,
+    });
+
+    tl.to("#rotating-plane", {
+      z: -70,
+      y: -100,
+      duration: 1.5,
+      ease: "power4.out",
+    });
+
+    tl.to(
+      "#rotating-plane",
+      {
+        rotateY: 50,
+        duration: 1.5,
+        ease: "power2.out",
+      },
+      "<"
+    );
+
+    tl.to(
+      "#rotating-plane",
+      {
+        x: 0,
+        z: 0,
+        y: 0,
+        rotateX: 0,
+        rotateY: 15,
+        rotateZ: -40,
+        duration: 1,
+        ease: "power2.inOut",
+      },
+      "-=.5"
+    );
+
+    // 上移
+    tl.to(
+      "#rotating-plane",
+      {
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+        // y: -150,
+        duration: 2,
+        ease: "power2.inOut",
+      },
+      "-=1"
+    );
+
+    tl.to(
+      "#rotating-plane",
+      {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.inOut",
+      },
+      0
+    );
+
+    // 色带生长动画
+    tl.to(
+      ".rgb-stripe",
+      {
+        width: "250%",
+        left: "-150%",
+        duration: 3.5,
+        ease: "power4.out",
+        stagger: 0.2,
+      },
+      0
+    );
+
+    // Logo 渐显动画
+    tl.to(
+      ".logo",
+      {
+        opacity: 1,
+        duration: 0.25,
+        ease: "power2.in",
+      },
+      2
+    );
+
+    // 随着动画进行，速度线逐渐淡出
+    tl.to(
+      ".speed-line",
+      {
+        opacity: 0.1,
+        duration: 1,
+        ease: "power2.out",
+      },
+      3
+    );
+
+    // 当 Logo 开始显现时，文字透明度整体提升
+    tl.fromTo(
+      ".floating-text",
+      { opacity: 0 },
+      { opacity: 0.4, duration: 1.5 },
+      1.5 // 在 Logo 动画进行到一半时开始
+    );
+
+    // logo 位置随机浮动
+    gsap.to(".ers-logo", {
+      x: gsap.utils.random(-20, 20),
+      y: gsap.utils.random(-20, 20),
+      duration: 2.5,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
+
+    // 标题入场
+    tl.to(
+      ".header-section",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+      },
+      2.5
+    ); // 2.5秒时开始
+
+    // 按钮入场
+    tl.to(
+      ".footer-section",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+      },
+      2.8
+    ); // 略晚于标题，形成视差感
+  </script>
+</html>
