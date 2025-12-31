@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import rsIcon from "../assets/RS.svg";
 const acceptLang = Astro.request.headers.get("accept-language");
 const targetLang = acceptLang?.includes("zh") ? "zh-cn" : "en";
 
@@ -72,7 +73,7 @@ export const prerender = false;
             >
               <img
                 class="logo h-full w-auto text-white opacity-0"
-                src="./src/assets/RS.svg"
+                src={rsIcon.src}
               />
             </div>
           </div>
