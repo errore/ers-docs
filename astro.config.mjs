@@ -28,6 +28,40 @@ export default defineConfig({
       './src/styles/global.css',
       '@fontsource-variable/jetbrains-mono'
     ],
+    sidebar: [
+      {
+        label: '入门',
+        link: '/getting-started/',
+        translations: {
+          'en': 'Getting Started',
+          'zh-cn': '入门',
+        },
+      },
+      {
+        label: '使用ERS材质节点',
+        autogenerate: { directory: 'nodes' },
+        translations: {
+          'en': 'Using ERS Material Nodes',
+          'zh-cn': '使用ERS材质节点',
+        },
+      },
+      {
+        label: '进阶指南',
+        autogenerate: { directory: 'advanced' },
+        translations: {
+          'en': 'Advanced Guides',
+          'zh-cn': '进阶指南',
+        },
+      },
+      {
+        label: '常见问题',
+        link: '/faq/',
+        translations: {
+          'en': 'FAQ',
+          'zh-cn': '常见问题',
+        },
+      }
+    ],
     plugins: [
       starlightHeadingBadges(),
       starlightImageZoom(),
