@@ -11,6 +11,10 @@ import starlightHeadingBadges from 'starlight-heading-badges'
 import starlightScrollToTop from 'starlight-scroll-to-top'
 import starlightImageZoom from 'starlight-image-zoom'
 
+import react from '@astrojs/react';
+
+import path from 'path';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://ers.errore.ink',
@@ -89,7 +93,7 @@ export default defineConfig({
         lang: 'en',
       },
     }
-  })],
+  }), react()],
 
   adapter: cloudflare(),
 
@@ -97,5 +101,11 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
     ],
+    resolve: {
+      alias: {
+        '~/': path.resolve('./src') + '/', // 使用 ~/components/...
+        '@': path.resolve('./src')         // 使用 @/components/...
+      }
+    }
   }
 });

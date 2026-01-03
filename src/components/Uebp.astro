@@ -1,0 +1,13 @@
+---
+import { BlueprintViewer } from "blueprintue-react-components"
+import { Aside, Code } from '@astrojs/starlight/components';
+
+const { height="500px", blueprintData='' } = Astro.props
+---
+
+
+{ blueprintData && <div class="not-content">
+    <BlueprintViewer height={height} type="ERS Material" blueprintData={blueprintData} client:visible />
+</div>
+<Code code="选中后可使用 Ctrl +  C  复制节点，然后粘贴到UE中" mark={ ["Ctrl", " C "] } />
+}

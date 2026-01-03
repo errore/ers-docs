@@ -6,6 +6,8 @@ import { Aside } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { FileTree } from '@astrojs/starlight/components';
 import { LinkCard } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import ERSInstallerImg from './ERS_Installer.png'
 
 <Aside type="tip" title="欢迎使用">
 👋这里是ERS的帮助页面，可以帮助您快速入门、并根据您的项目需求选择渲染管线。
@@ -23,6 +25,7 @@ ERS可以为您的Unlit材质添加灯光支持，或是使用**前向渲染**�
 
 1. 启动ERS安装程序，选择要**安装的UE版本**，然后点击 `安装` 按钮。
 
+    <Image src={ERSInstallerImg} alt="ERS Installer" width="400" />
     这会向UE引擎注入必要的ERS Shader文件，ERS安装程序会自动处理这些文件。
     
     在不启用ERS插件的情况下，您的UE引擎仍然可以正常工作。要想还原更改，只需点击ERS安装器中 `恢复` 按钮即可。
@@ -33,10 +36,12 @@ ERS可以为您的Unlit材质添加灯光支持，或是使用**前向渲染**�
 
     <FileTree>
 
-    - 你的项目根目录
+    - 你的项目根目
+        - ...
         - Plugins
             - **ERS**
                 - ...
+        - ...
 
     </FileTree>
 
