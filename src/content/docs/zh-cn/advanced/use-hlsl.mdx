@@ -2,4 +2,112 @@
 title: 在前向渲染管线中使用HLSL
 ---
 
-### 教程和文档正在快马加鞭制作中，请耐心等候🙏 :badge[施工中]{variant=caution}
+import { LinkCard } from '@astrojs/starlight/components';
+
+
+## 使用HLSL插件
+
+强烈建议使用 `HLSL Material` 插件来编写 HLSL 代码。
+
+当然，也可以直接使用 `Custom` 节点来编写HLSL代码。
+
+<LinkCard
+    title="不使用插件，跳过本节"
+    href="#在hlsl中使用ers"
+/>
+
+### 安装HLSL Material插件
+
+:::tip
+该插件提供了 HLSL函数 **自动生成函数节点** 的功能，简化了在材质中使用HLSL代码的过程。
+:::
+
+原插件在 UE 5.6+ 版本中无法正常编译，作者可能已经停止维护，我提供了一个修复版本，您可以从以下链接获取Github仓库下载：
+
+<LinkCard
+    title="HLSL Material Plugin"
+    href="https://github.com/errore/HLSLMaterial"
+    description="UE 5.6+ 修复版本"
+/>
+
+也可以在项目Plugins目录下使用以下命令直接克隆仓库：
+
+```bash title="安装HLSL Material插件"
+git clone https://github.com/errore/HLSLMaterial.git
+```
+
+### 使用HLSL编写节点
+
+安装完成后，您可以按照原插件的使用说明来编写和使用 HLSL 代码：
+
+```hlsl
+// @param BaseColor 材质颜色
+// @param Color 渲染结果
+void SampleNode(float3 BaseColor,
+	out float3 Color,
+	FMaterialPixelParameters Parameters)
+{
+    float3 V = normalize(Parameters.CameraVector);
+    float3 N = Parameters.WorldNormal;
+
+    ...
+
+    Color = BaseColor * ...;
+}
+```
+这会生成一个名为 `SampleNode` 的自定义函数节点，该函数节点接收 `BaseColor` 并输出 `Color` 颜色。
+
+## 在HLSL中使用ERS
+
+ERS中定义了自定义灯光数据结构，用于存储自定义灯光数据。
+
+```hlsl
+// CustomLightData.ush
+struct FCustomLight
+{
+    float3 L;               // 灯光方向
+    float3 Color;           // 灯光颜色
+    float Attenuation;      // 灯光衰减
+    float Shadow;           // 灯光阴影
+    float SpecularScale;    // 镜面反射
+    bool bIsRect;           // 是否是矩形灯
+};
+```
+ERS向引擎注入LightPacket结构体来存储自定义灯光数据。
+
+```hlsl
+// CustomLightData.ush
+struct FCustomLightPacket
+{
+	uint NumLights; // 当前块中灯光数量
+	bool bHasDirectionalLight; // 当有平行光启用吗
+	FCustomLight DirectionalLight; // 平行光
+	FCustomLight Lights[NUM_CUSTOM_LIGHTS]; // 其他灯光
+	float SSAO; // SSAO
+
+	float3 BakedDiffuseLighting; // 预烘培全局光照漫反射
+	float3 BakedSubsurfaceLighting; // 预烘培全局光照次表面
+	float3 Reflections; // 预烘培全局光照镜面反射
+};
+```
+在蓝图节点中使用 `CustomLightPack` 即可访问以上自定义灯光数据。
+
+在自定义HLSL节点中，您可以使用以下代码来计算自定义灯光。
+
+```hlsl ins={"添加你自己的主光源光照逻辑":3-5} ins={"添加你自己的光照逻辑":11-13}
+FCustomLight DirLight = CustomLightPack.DirectionalLight;
+
+
+float Shadow = DirLight.Shadow;
+...
+
+for (int i = 0; i < CustomLightPack.NumLights; i++)
+{
+    FCustomLight Light = CustomLightPack.Lights[i];
+
+
+    float NoL = dot(Light.L, N);
+    ...
+
+}
+```
