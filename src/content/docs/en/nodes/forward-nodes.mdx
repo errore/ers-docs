@@ -1,0 +1,314 @@
+---
+title: 在前向渲染使用ERS定制渲染
+---
+
+import Uebp from '~/components/Uebp.astro'
+import { Aside } from '@astrojs/starlight/components';
+
+
+## 如何启用ERS前向渲染
+
+<Aside type="tip">
+
+使用前向渲染，需要在项目设置中搜索 `forward` 并打开 `Enable Forward Rendering` 选项。
+
+</Aside>
+
+ERS的前向渲染提供了多种节点来实现定制化渲染效果。
+
+所有前向渲染节点都必须在前向渲染模式下使用，否则会产生错误:
+
+```
+Must be used in forward shading mode
+```
+~所以你没法在酒吧点炒饭~
+
+## 节点
+
+### 1. GetGlobalLights节点（获取全局光照）
+
+`GetGlobalLights` 节点用于获取场景中的全局光照信息，包括漫反射光照和次表面漫反射光照。
+
+- **OutDiffuseLighting**: 输出漫反射光照
+- **OutSubsurfaceLighting**: 输出次表面漫反射光照
+
+<Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_25" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_25'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_1" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_25.MaterialExpressionMaterialFunctionCall_1'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_1" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_25.MaterialExpressionMaterialFunctionCall_1'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetGlobalLights.GetGlobalLights'"
+      FunctionOutputs(0)=(ExpressionOutputId=23F2B7F94490E0A5F0079BB0B1A554B3,Output=(OutputName="OutDiffuseLighting"))
+      FunctionOutputs(1)=(ExpressionOutputId=CC63B92440F63B8EEF22A0AFCB5E6089,Output=(OutputName="OutSubsurfaceLighting"))
+      MaterialExpressionEditorX=-320
+      MaterialExpressionEditorY=1072
+      MaterialExpressionGuid=8989C52A4BA8E24BE7B949BCA239623D
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="OutDiffuseLighting")
+      Outputs(1)=(OutputName="OutSubsurfaceLighting")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_1'"
+   NodePosX=-320
+   NodePosY=1072
+   NodeGuid=4E29B78F43F0DFD151E1D4A95D8B7F86
+   CustomProperties Pin (PinId=EDEAA76B4B0AC41CE3A21D8D80C4C725,PinName="OutDiffuseLighting",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=B081D010480E517F313CC59B14F1BBC9,PinName="OutSubsurfaceLighting",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 2. GetReflection节点（获取反射）
+
+`GetReflection` 节点用于获取场景中的镜面反射信息。
+
+- **OutReflection**: 输出镜面反射（完全光滑）
+
+<Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_26" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_26'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_2" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_26.MaterialExpressionMaterialFunctionCall_2'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_2" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_26.MaterialExpressionMaterialFunctionCall_2'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetReflection.GetReflection'"
+      FunctionOutputs(0)=(ExpressionOutputId=BC5B176C4F8C8E1EE9E01D889F0A306B,Output=(OutputName="OutReflection"))
+      MaterialExpressionEditorX=-96
+      MaterialExpressionEditorY=1088
+      MaterialExpressionGuid=3DBF874D42F246245709459FA199E0B2
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="OutReflection")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_2'"
+   NodePosX=-96
+   NodePosY=1088
+   NodeGuid=66A4AC3F4DCB3692193ED493DB5454B8
+   CustomProperties Pin (PinId=FD6E0A7F49107502BBC515BDC498EC7C,PinName="OutReflection",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 3. GetSSAO节点（获取环境光遮蔽）
+
+`GetSSAO` 节点用于获取屏幕空间环境光遮蔽(SSAO)效果。
+
+- **OutSSAO**: 输出环境光遮蔽
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_27" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_27'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_4" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_27.MaterialExpressionMaterialFunctionCall_4'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_4" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_27.MaterialExpressionMaterialFunctionCall_4'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetSSAO.GetSSAO'"
+      FunctionOutputs(0)=(ExpressionOutputId=87C0848E4865000F9EAC5C9942ABA36A,Output=(OutputName="OutSSAO"))
+      MaterialExpressionEditorX=-320
+      MaterialExpressionEditorY=1184
+      MaterialExpressionGuid=C230B131427C1B2042F8A69E73813C03
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="OutSSAO")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_4'"
+   NodePosX=-320
+   NodePosY=1184
+   NodeGuid=D2C4585645B3D6D089F9908D12EB715A
+   CustomProperties Pin (PinId=B7C7EC9944D698D3BE00B58D5A7FDF85,PinName="OutSSAO",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 4. GetMainLight节点（获取主光源）
+
+`GetMainLight` 节点获取场景中的主光源信息，包括漫反射系数、高光系数、光源颜色、衰减和阴影。
+
+- **OutNoL**: 输出漫反射系数
+- **OutHoN**: 输出高光系数
+- **OutColor**: 输出光源颜色
+- **OutAttenuation**: 输出光源衰减
+- **OutShadow**: 输出阴影
+
+<Uebp height="300px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_28" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_28'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_5" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_28.MaterialExpressionMaterialFunctionCall_5'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_5" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_28.MaterialExpressionMaterialFunctionCall_5'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetMainLight.GetMainLight'"
+      FunctionOutputs(0)=(ExpressionOutputId=18A3089C4938F0FE21EFD7B33EC89F51,Output=(OutputName="OutNoL"))
+      FunctionOutputs(1)=(ExpressionOutputId=5F988CC84A1D177526E8FFA8627B7BFE,Output=(OutputName="OutHoN"))
+      FunctionOutputs(2)=(ExpressionOutputId=BBEEF8CF498683CF770BDFAF0F372DD1,Output=(OutputName="OutColor"))
+      FunctionOutputs(3)=(ExpressionOutputId=28B5601A45D27A8B11B404A8E040C7CF,Output=(OutputName="OutAttenuation"))
+      FunctionOutputs(4)=(ExpressionOutputId=D72177F048274CC155259882671B0835,Output=(OutputName="OutShadow"))
+      MaterialExpressionEditorX=-640
+      MaterialExpressionEditorY=1072
+      MaterialExpressionGuid=F4D8023941EFE4283FEC1AB2219B2261
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="OutNoL")
+      Outputs(1)=(OutputName="OutHoN")
+      Outputs(2)=(OutputName="OutColor")
+      Outputs(3)=(OutputName="OutAttenuation")
+      Outputs(4)=(OutputName="OutShadow")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_5'"
+   NodePosX=-640
+   NodePosY=1072
+   NodeGuid=975D23AC46FEA610217A658DF4C0B6D6
+   CustomProperties Pin (PinId=1558CB3341CAA960C79CA292C3B8ADFF,PinName="OutNoL",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=F4B5251C439D3BDB4EC3DF88606BB42D,PinName="OutHoN",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=6C45E7BA4A6749F671D4B9A9047D15A5,PinName="OutColor",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=46ACC14044B3A91A61CCA28ABA3B5621,PinName="OutAttenuation",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=A42E22954BF4D8A8E6A0068292ED415A,PinName="OutShadow",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 5. GetMainLightShading节点（获取主光渲染结果）
+
+`GetMainLightShading` 节点计算主光源的渲染结果。
+
+- **Smoothness**: 材质光滑度
+- **Result**: 输出渲染结果
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_29" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_29'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_6" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_29.MaterialExpressionMaterialFunctionCall_6'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_6" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_29.MaterialExpressionMaterialFunctionCall_6'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetMainLightShading.GetMainLightShading'"
+      FunctionInputs(0)=(ExpressionInputId=307599DC46FC7032CCB35CA16642AE46,Input=(OutputIndex=-1,InputName="Smoothness"))
+      FunctionOutputs(0)=(ExpressionOutputId=C08C6A6447EE296155F77484ABE42D7C,Output=(OutputName="Result"))
+      MaterialExpressionEditorX=-560
+      MaterialExpressionEditorY=1264
+      MaterialExpressionGuid=9F588C374D9B1AD82D4848ADE5DB1CEA
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="Result")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_6'"
+   NodePosX=-560
+   NodePosY=1264
+   NodeGuid=2842770E4B5DF06DE9F75EB71079EE4B
+   CustomProperties Pin (PinId=CC3F8F844274F60E01CA068B52D47476,PinName="Smoothness (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=AF91BF1D4FD3D42875774FB2BA4E2C02,PinName="Result",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 6. GetMainLightShadow节点（获取主光阴影）
+
+`GetMainLightShadow` 节点获取主光源的阴影信息。
+
+- **Result**: 输出阴影信息
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_31" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_31'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_8" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_31.MaterialExpressionMaterialFunctionCall_8'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_8" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_31.MaterialExpressionMaterialFunctionCall_8'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetMainLightShadow.GetMainLightShadow'"
+      FunctionOutputs(0)=(ExpressionOutputId=924641FE46AA66BE0EE333B3EC0A120A,Output=(OutputName="Result"))
+      MaterialExpressionEditorX=-240
+      MaterialExpressionEditorY=1376
+      MaterialExpressionGuid=2CA9E6534368C8D654397C819B7C335C
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="Result")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_8'"
+   NodePosX=-240
+   NodePosY=1376
+   NodeGuid=9C8A04694FCF9150DE68C09FA5AE860E
+   CustomProperties Pin (PinId=15AFF7754366CC58AB4E6F8CE8E6264E,PinName="Result",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 7. GetOtherLightShading节点（获取其他光源渲染结果）
+
+`GetOtherLightShading` 节点计算除主光源外的其他光源的渲染结果。
+
+- **Smoothness**: 材质光滑度
+- **Result**: 输出其他光源渲染结果
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_32" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_32'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_9" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_32.MaterialExpressionMaterialFunctionCall_9'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_9" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_32.MaterialExpressionMaterialFunctionCall_9'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/GetOtherLightShading.GetOtherLightShading'"
+      FunctionInputs(0)=(ExpressionInputId=1AEE6609435FC5C5CC49A2991B0C9D07,Input=(OutputIndex=-1,InputName="Smoothness"))
+      FunctionOutputs(0)=(ExpressionOutputId=51428C5F4A1BA7EF4F7A51A66F4470E6,Output=(OutputName="Result"))
+      MaterialExpressionEditorX=-544
+      MaterialExpressionEditorY=1504
+      MaterialExpressionGuid=1BAAB8C94346B407BB41498B5DE5EA31
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="Result")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_9'"
+   NodePosX=-544
+   NodePosY=1504
+   NodeGuid=BA8F70B449000184707CE48E4461E868
+   CustomProperties Pin (PinId=4AE271FD44A0052CE625C2BC17276B7F,PinName="Smoothness (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=35B6030942E61F0141FFFC968C41D711,PinName="Result",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 8. SimpleToon节点（简单卡通渲染）
+
+`SimpleToon` 节点实现了一个简单的卡通渲染效果，通过参数控制边缘光和光滑度。
+
+- **Albedo**: 漫反射颜色
+- **Ambient**: 环境光
+- **Smoothness**: 材质光滑度
+- **RimColor**: 边缘光颜色
+- **RimSize**: 边缘光大小
+- **ToonSmooth**: 卡通平滑度
+- **OutColor**: 输出最终颜色
+
+<Uebp height="350px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_34" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_34'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_11" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_34.MaterialExpressionMaterialFunctionCall_11'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_11" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_34.MaterialExpressionMaterialFunctionCall_11'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/SimpleToon.SimpleToon'"
+      FunctionInputs(0)=(ExpressionInputId=6B1A445A4A1D2D49CCE9919E6BF20D47,Input=(OutputIndex=-1,InputName="Albedo"))
+      FunctionInputs(1)=(ExpressionInputId=B27EA20845944FB86BA65A9959848017,Input=(OutputIndex=-1,InputName="Ambient"))
+      FunctionInputs(2)=(ExpressionInputId=6105F9254471A4AD8710528D220040F3,Input=(OutputIndex=-1,InputName="Smoothness"))
+      FunctionInputs(3)=(ExpressionInputId=A58FABCB4E20B21E7036D9A628BBABB4,Input=(OutputIndex=-1,InputName="RimColor"))
+      FunctionInputs(4)=(ExpressionInputId=EBA5FB4B432428A963F1F5AA29F2521C,Input=(OutputIndex=-1,InputName="RimSize"))
+      FunctionInputs(5)=(ExpressionInputId=5E66B6A64F50AD9FEDFB188DB6EA0C9B,Input=(OutputIndex=-1,InputName="ToonSmooth"))
+      FunctionOutputs(0)=(ExpressionOutputId=7E750CDE42B1C946B0805181E4622416,Output=(OutputName="OutColor"))
+      MaterialExpressionEditorX=384
+      MaterialExpressionEditorY=1280
+      MaterialExpressionGuid=801C3E49460C64D3B6F40F8517E54E6A
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="OutColor")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_11'"
+   NodePosX=384
+   NodePosY=1280
+   NodeGuid=F52E0092443D85E678CA3B83BA26B23B
+   CustomProperties Pin (PinId=3405DA684802BBEC3057B49D9CD50371,PinName="Albedo (V3)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=3F79FEDE41A851F8795DB49506CD5AA1,PinName="Ambient (V3)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=95BA0DC84B70021A0B0E8182B38B73FE,PinName="Smoothness (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=FF173128421AA48273A119AE9CAB8900,PinName="RimColor (V3)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=23C26DA544814E9168EC26B838214D2D,PinName="RimSize (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=41CFD9CB4B81227801DAD2A78320C90A,PinName="ToonSmooth (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=D71AB75F43532B2CC49EFAAB44B95B4B,PinName="OutColor",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 9. SimplePBR节点（简单PBR渲染）
+
+`SimplePBR` 节点实现了一个简单的物理基础渲染效果，基于材质的基色、粗糙度和金属度计算渲染结果。
+
+- **BaseColor**: 材质基色
+- **Roughness**: 材质粗糙度
+- **Metallic**: 材质金属度
+- **Color**: 输出PBR渲染结果
+
+<Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_33" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_33'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_10" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_33.MaterialExpressionMaterialFunctionCall_10'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_10" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_33.MaterialExpressionMaterialFunctionCall_10'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/HLSL_Lib_GeneratedFunctions/SimplePBR.SimplePBR'"
+      FunctionInputs(0)=(ExpressionInputId=A19D680540AEC615C72207AC5ED739F1,Input=(OutputIndex=-1,InputName="BaseColor"))
+      FunctionInputs(1)=(ExpressionInputId=3A6BDD97428579798F1CE0A97B813FF7,Input=(OutputIndex=-1,InputName="Roughness"))
+      FunctionInputs(2)=(ExpressionInputId=BBEE5FB24FCCD778249AEBAE12876062,Input=(OutputIndex=-1,InputName="Metallic"))
+      FunctionOutputs(0)=(ExpressionOutputId=57ED034F4D48DC16608B27A115A5E308,Output=(OutputName="Color"))
+      MaterialExpressionEditorX=160
+      MaterialExpressionEditorY=1280
+      MaterialExpressionGuid=1C80F605471DC5D0EB2CEA938C622A51
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.LightTest'"
+      Outputs(0)=(OutputName="Color")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_10'"
+   NodePosX=160
+   NodePosY=1280
+   NodeGuid=DD4960424BD1DE09FE27279D03771416
+   CustomProperties Pin (PinId=F4EF2EE84C53C4A9EF1101A8ADD652F4,PinName="BaseColor (V3)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=B80913D94973338EE560BD90FE50EEC4,PinName="Roughness (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=C125AC7E489EAF183BE6AC8AA80A86E8,PinName="Metallic (S)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=BBD1B28D4A0818ED8E02ADB0E4EF2B0D,PinName="Color",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
