@@ -6,6 +6,7 @@ import { Aside } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 import { FileTree } from '@astrojs/starlight/components';
 import { LinkCard } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
 import ERSInstallerImg from './ERS_Installer.png'
 
@@ -19,8 +20,27 @@ ERS可以为您的Unlit材质添加灯光支持，或是使用**前向渲染**�
 
 由于使用了原生的渲染管线，ERS材质可以与引擎中的大多数功能兼容，例如光照贴图、反射捕捉和后期处理效果。
 
+您可以在以下位置购买ERS:
+
+<CardGrid>
+<LinkCard
+    title="B站商店版"
+    href="https://mall.bilibili.com/neul-next/detailuniversal/detail.html?page=detailuniversal_detail&itemsId=40100548&loadingShow=1&noTitleBar=1#noReffer=true&msource=merchant_share"
+    target="_blank"
+/>
+
+<LinkCard
+    title="FAB商店版(敬请期待)"
+    href="/zh-cn/getting-started/#1-ers是什么"
+/>
+</CardGrid>
+
 ## 2. 如何安装ERS
 
+根据您的插件版本选择以下安装方式：
+
+<details>
+<summary>B站商店版</summary>
 <Steps>
 
 1. 启动ERS安装程序，选择要**安装的UE版本**，然后点击 `安装` 按钮。
@@ -50,8 +70,24 @@ ERS可以为您的Unlit材质添加灯光支持，或是使用**前向渲染**�
 4. ERS已经您的项目中完成配置，您现在可以开始使用ERS为您的Unlit材质添加灯光支持了🥳！
 
 </Steps>
+</details>
 
+<details>
+<summary>FAB商店版</summary>
+<Steps>
 
+1. 启动您的UE项目，打开 `插件` 窗口，确保ERS插件已启用。
+
+2. 转到 `Tools > Install ERS` 安装ERS引擎文件。
+
+    :::note
+    访问引擎目录需要管理员权限，在UAC模式下，请选择 `是` 。
+    :::
+
+2. ERS已经您的项目中完成配置，您现在可以开始使用ERS为您的Unlit材质添加灯光支持了🥳！
+
+</Steps>
+</details>
 
 ## 3. 选择您要使用的UE渲染管线
 

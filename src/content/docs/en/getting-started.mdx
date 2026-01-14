@@ -1,5 +1,5 @@
 ---
-title: 欢迎使用ERS
+title: Welcome to ERS
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -9,59 +9,64 @@ import { LinkCard } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
 
 <Aside type="tip" title="Welcome!">
-👋这里是ERS的帮助页面，可以帮助您快速入门、并根据您的项目需求选择渲染管线。
+👋 This is the help page for ERS, which can help you get started quickly and choose a rendering pipeline according to your project needs.
 </Aside>
 
-## 1. ERS是什么
+## 1. What is ERS
 
-ERS可以为您的Unlit材质添加灯光支持，或是使用**前向渲染**模式来完全自定义您的材质外观。
+ERS (Easy Rendering Solution) can add lighting support to your Unlit materials, or use **forward rendering** mode to completely customize the appearance of your materials.
 
-由于使用了原生的渲染管线，ERS材质可以与引擎中的大多数功能兼容，例如光照贴图、反射捕捉和后期处理效果。
+Since native rendering pipelines are used, ERS materials are compatible with most features in the engine, such as lightmaps, reflection captures, and post-processing effects.
 
-## 2. 如何安装ERS
+<LinkCard
+    title="FAB Store (Coming Soon...)"
+    href="/en/getting-started/#1-what-is-ers"
+/>
+
+## 2. How to Install ERS
 
 <Steps>
 
-1. 启动您的UE项目，打开 `插件` 窗口，确保ERS插件已启用。
+1. Launch your UE project, open the `Plugins` window, and ensure that the ERS plugin is enabled.
 
-2. 转到 `Tools > Install ERS` 安装ERS引擎文件。
+2. Go to `Tools > Install ERS` to install the ERS engine files.
 
     :::note
-    访问引擎目录需要管理员权限，在UAC模式下，请选择 `是` 。
+    Access to the engine directory requires administrator privileges. In UAC mode, please select `Yes`.
     :::
 
-2. ERS已经您的项目中完成配置，您现在可以开始使用ERS为您的Unlit材质添加灯光支持了🥳！
+2. ERS has been configured in your project, and you can now start using ERS to add lighting support to your Unlit materials 🥳!
 
 </Steps>
 
 
 
-## 3. 选择您要使用的UE渲染管线
+## 3. Choose the UE Rendering Pipeline You Want to Use
 
-ERS支持两种渲染管线：`前向渲染` 和 `延迟渲染` 。您可以根据项目需求选择合适的渲染管线。
+ERS supports two rendering pipelines: `Forward Rendering` and `Deferred Rendering`. You can choose the appropriate rendering pipeline based on your project requirements.
 
-<Aside type="tip" title="如何选择渲染管线？">
-1. **前向渲染管线**适用于大多数情况，而**延迟渲染管线**则适用于需要复杂光照效果的场景。
-2. 在ERS中，如果您想要`完全自定义`材质外观，建议选择**前向渲染管线**。
-3. 对于新手，可以从配置简单的**延迟渲染管线**开始。
+<Aside type="tip" title="How to Choose a Rendering Pipeline?">
+1. **Forward rendering pipeline** is suitable for most situations, while **deferred rendering pipeline** is suitable for scenes that require complex lighting effects.
+2. In ERS, if you want to `completely customize` the appearance of your materials, it is recommended to choose the **forward rendering pipeline**.
+3. For beginners, you can start with the configuration-simple **deferred rendering pipeline**.
 </Aside>
 
-### 3.1 延迟渲染管线
+### 3.1 Deferred Rendering Pipeline
 
-延迟渲染管线是UE的默认渲染管线。无需进行额外配置即可使用ERS的延迟渲染功能。
+The deferred rendering pipeline is UE's default rendering pipeline. No additional configuration is required to use ERS's deferred rendering functionality.
 
-<Aside type="caution" title="注意">
+<Aside type="caution" title="Note">
 
-如果您使用 **UE 5.7** ，需要在项目设置中搜索 `Substrate` 并关闭 `Enable Substrate (Beta)` 选项，否则会导致ERS无法正常工作。
+If you are using **UE 5.7**, you need to search for `Substrate` in Project Settings and disable the `Enable Substrate (Beta)` option, otherwise ERS will not work properly.
 
 </Aside>
 
-<LinkCard title="如何在延迟渲染中使用ERS？" href="/zh-cn/nodes/deferred-nodes/" />
+<LinkCard title="How to use ERS in deferred rendering?" href="/en/nodes/deferred-nodes/" />
 
-### 3.2 前向渲染管线
+### 3.2 Forward Rendering Pipeline
 
-要使用前向渲染管线，您需要在项目设置中进行以下配置：
+To use the forward rendering pipeline, you need to configure the following in your project settings:
 
-在项目设置中搜索 `Forward` 并打开 `Use Forward Shading` 选项。
+Search for `Forward` in Project Settings and enable the `Use Forward Shading` option.
 
-<LinkCard title="如何在前向渲染中使用ERS？" href="/zh-cn/nodes/forward-nodes/" /> 
+<LinkCard title="How to use ERS in forward rendering?" href="/en/nodes/forward-nodes/" />

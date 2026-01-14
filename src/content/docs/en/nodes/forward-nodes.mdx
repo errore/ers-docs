@@ -1,36 +1,36 @@
 ---
-title: 在前向渲染使用ERS定制渲染
+title: Using ERS Custom Rendering in Forward Rendering
 ---
 
 import Uebp from '~/components/Uebp.astro'
 import { Aside } from '@astrojs/starlight/components';
 
 
-## 如何启用ERS前向渲染
+## How to Enable ERS Forward Rendering
 
 <Aside type="tip">
 
-使用前向渲染，需要在项目设置中搜索 `forward` 并打开 `Enable Forward Rendering` 选项。
+To use forward rendering, search for `forward` in Project Settings and enable the `Enable Forward Rendering` option.
 
 </Aside>
 
-ERS的前向渲染提供了多种节点来实现定制化渲染效果。
+ERS forward rendering provides various nodes to achieve custom rendering effects.
 
-所有前向渲染节点都必须在前向渲染模式下使用，否则会产生错误:
+All forward rendering nodes must be used in forward rendering mode, otherwise errors will occur:
 
 ```
 Must be used in forward shading mode
 ```
-~所以你没法在酒吧点炒饭~
+~So you can't brew coffee in a microwave~
 
-## 节点
+## Nodes
 
-### 1. GetGlobalLights节点（获取全局光照）
+### 1. GetGlobalLights Node (Get Global Lighting)
 
-`GetGlobalLights` 节点用于获取场景中的全局光照信息，包括漫反射光照和次表面漫反射光照。
+The `GetGlobalLights` node is used to get global lighting information in the scene, including diffuse lighting and subsurface diffuse lighting.
 
-- **OutDiffuseLighting**: 输出漫反射光照
-- **OutSubsurfaceLighting**: 输出次表面漫反射光照
+- **OutDiffuseLighting**: Outputs diffuse lighting
+- **OutSubsurfaceLighting**: Outputs subsurface diffuse lighting
 
 <Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_25" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_25'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_1" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_25.MaterialExpressionMaterialFunctionCall_1'"
@@ -55,11 +55,11 @@ Must be used in forward shading mode
 End Object
 `} />
 
-### 2. GetReflection节点（获取反射）
+### 2. GetReflection Node (Get Reflection)
 
-`GetReflection` 节点用于获取场景中的镜面反射信息。
+The `GetReflection` node is used to get specular reflection information in the scene.
 
-- **OutReflection**: 输出镜面反射（完全光滑）
+- **OutReflection**: Outputs specular reflection (completely smooth)
 
 <Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_26" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_26'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_2" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_26.MaterialExpressionMaterialFunctionCall_2'"
@@ -81,11 +81,11 @@ End Object
 End Object
 `} />
 
-### 3. GetSSAO节点（获取环境光遮蔽）
+### 3. GetSSAO Node (Get Ambient Occlusion)
 
-`GetSSAO` 节点用于获取屏幕空间环境光遮蔽(SSAO)效果。
+The `GetSSAO` node is used to get Screen Space Ambient Occlusion (SSAO) effect.
 
-- **OutSSAO**: 输出环境光遮蔽
+- **OutSSAO**: Outputs ambient occlusion
 
 <Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_27" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_27'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_4" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_27.MaterialExpressionMaterialFunctionCall_4'"
@@ -107,15 +107,15 @@ End Object
 End Object
 `} />
 
-### 4. GetMainLight节点（获取主光源）
+### 4. GetMainLight Node (Get Main Light)
 
-`GetMainLight` 节点获取场景中的主光源信息，包括漫反射系数、高光系数、光源颜色、衰减和阴影。
+The `GetMainLight` node gets main light information in the scene, including diffuse coefficient, specular coefficient, light color, attenuation and shadows.
 
-- **OutNoL**: 输出漫反射系数
-- **OutHoN**: 输出高光系数
-- **OutColor**: 输出光源颜色
-- **OutAttenuation**: 输出光源衰减
-- **OutShadow**: 输出阴影
+- **OutNoL**: Outputs diffuse coefficient
+- **OutHoN**: Outputs specular coefficient
+- **OutColor**: Outputs light color
+- **OutAttenuation**: Outputs light attenuation
+- **OutShadow**: Outputs shadow
 
 <Uebp height="300px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_28" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_28'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_5" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_28.MaterialExpressionMaterialFunctionCall_5'"
@@ -149,12 +149,12 @@ End Object
 End Object
 `} />
 
-### 5. GetMainLightShading节点（获取主光渲染结果）
+### 5. GetMainLightShading Node (Get Main Light Shading Result)
 
-`GetMainLightShading` 节点计算主光源的渲染结果。
+The `GetMainLightShading` node calculates the shading result of the main light.
 
-- **Smoothness**: 材质光滑度
-- **Result**: 输出渲染结果
+- **Smoothness**: Material smoothness
+- **Result**: Outputs shading result
 
 <Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_29" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_29'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_6" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_29.MaterialExpressionMaterialFunctionCall_6'"
@@ -178,11 +178,11 @@ End Object
 End Object
 `} />
 
-### 6. GetMainLightShadow节点（获取主光阴影）
+### 6. GetMainLightShadow Node (Get Main Light Shadow)
 
-`GetMainLightShadow` 节点获取主光源的阴影信息。
+The `GetMainLightShadow` node gets shadow information of the main light.
 
-- **Result**: 输出阴影信息
+- **Result**: Outputs shadow information
 
 <Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_31" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_31'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_8" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_31.MaterialExpressionMaterialFunctionCall_8'"
@@ -204,12 +204,12 @@ End Object
 End Object
 `} />
 
-### 7. GetOtherLightShading节点（获取其他光源渲染结果）
+### 7. GetOtherLightShading Node (Get Other Light Shading Result)
 
-`GetOtherLightShading` 节点计算除主光源外的其他光源的渲染结果。
+The `GetOtherLightShading` node calculates the shading result of other lights besides the main light.
 
-- **Smoothness**: 材质光滑度
-- **Result**: 输出其他光源渲染结果
+- **Smoothness**: Material smoothness
+- **Result**: Outputs other light shading result
 
 <Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_32" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_32'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_9" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_32.MaterialExpressionMaterialFunctionCall_9'"
@@ -233,17 +233,17 @@ End Object
 End Object
 `} />
 
-### 8. SimpleToon节点（简单卡通渲染）
+### 8. SimpleToon Node (Simple Toon Rendering)
 
-`SimpleToon` 节点实现了一个简单的卡通渲染效果，通过参数控制边缘光和光滑度。
+The `SimpleToon` node implements a simple toon rendering effect, controlling rim light and smoothness through parameters.
 
-- **Albedo**: 漫反射颜色
-- **Ambient**: 环境光
-- **Smoothness**: 材质光滑度
-- **RimColor**: 边缘光颜色
-- **RimSize**: 边缘光大小
-- **ToonSmooth**: 卡通平滑度
-- **OutColor**: 输出最终颜色
+- **Albedo**: Diffuse color
+- **Ambient**: Ambient light
+- **Smoothness**: Material smoothness
+- **RimColor**: Rim light color
+- **RimSize**: Rim light size
+- **ToonSmooth**: Toon smoothness
+- **OutColor**: Outputs final color
 
 <Uebp height="350px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_34" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_34'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_11" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_34.MaterialExpressionMaterialFunctionCall_11'"
@@ -277,14 +277,14 @@ End Object
 End Object
 `} />
 
-### 9. SimplePBR节点（简单PBR渲染）
+### 9. SimplePBR Node (Simple PBR Rendering)
 
-`SimplePBR` 节点实现了一个简单的物理基础渲染效果，基于材质的基色、粗糙度和金属度计算渲染结果。
+The `SimplePBR` node implements a simple physically-based rendering effect, calculating the rendering result based on material base color, roughness and metallic properties.
 
-- **BaseColor**: 材质基色
-- **Roughness**: 材质粗糙度
-- **Metallic**: 材质金属度
-- **Color**: 输出PBR渲染结果
+- **BaseColor**: Material base color
+- **Roughness**: Material roughness
+- **Metallic**: Material metallic
+- **Color**: Outputs PBR rendering result
 
 <Uebp height="250px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_33" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_33'"
    Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_10" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.LightTest:MaterialGraph_0.MaterialGraphNode_33.MaterialExpressionMaterialFunctionCall_10'"
@@ -311,4 +311,3 @@ End Object
    CustomProperties Pin (PinId=BBD1B28D4A0818ED8E02ADB0E4EF2B0D,PinName="Color",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
 End Object
 `} />
-

@@ -1,41 +1,42 @@
 ---
-title: 在前向渲染管线中使用HLSL
+title: Using HLSL in Forward Rendering Pipeline
 ---
 
 import { LinkCard } from '@astrojs/starlight/components';
 import { FileTree } from '@astrojs/starlight/components';
 
 
-## 使用HLSL插件
+## Using the HLSL Plugin
 
-强烈建议使用 `HLSL Material` 插件来编写 HLSL 代码。
+It is strongly recommended to use the `HLSL Material` plugin for writing HLSL code.
 
-当然，也可以直接使用 `Custom` 节点来编写HLSL代码。
+Alternatively, you can directly use the `Custom` node to write HLSL code.
 
 <LinkCard
-    title="不使用插件，跳过本节"
-    href="#在hlsl中使用ers"
+    title="Skip this section without using plugins"
+    href="#using-ers-in-hlsl"
 />
 
-### 安装HLSL Material插件
+### Installing the HLSL Material Plugin
 
 :::tip
-该插件提供了 HLSL函数 **自动生成函数节点** 的功能，简化了在材质中使用HLSL代码的过程。
+This plugin provides the functionality of **automatically generating function nodes** from HLSL functions, simplifying the process of using HLSL code in materials.
 :::
 
-原插件在 UE 5.6+ 版本中无法正常编译，作者可能已经停止维护，我提供了一个修复版本，您可以从以下链接获取Github仓库下载，然后解压到Plugins目录下：
+The original plugin cannot be compiled properly in UE 5.6+ versions, and the author may have stopped maintaining it. I provide a fixed version that you can download from the Github repository below, then unzip to the Plugins directory:
 
 <LinkCard
     title="HLSL Material Plugin"
     href="https://github.com/errore/HLSLMaterial"
-    description="UE 5.6+ 修复版本"
+    description="UE 5.6+ Fixed Version"
+    target="_blank"
 />
 
-安装完成后，您的项目结构应该如下所示：
+After installation, your project structure should look like this:
 
 <FileTree>
 
-- 你的项目根目
+- YourProjectRoot
     - ...
     - Plugins
         - **HLSLMaterial-master**
@@ -45,19 +46,19 @@ import { FileTree } from '@astrojs/starlight/components';
 
 </FileTree>
 
-也可以在项目Plugins目录下使用以下命令直接克隆仓库：
+You can also directly clone the repository to the project's Plugins directory using the following command:
 
-```bash title="安装HLSL Material插件"
+```
 git clone https://github.com/errore/HLSLMaterial.git
 ```
 
-### 使用HLSL编写节点
+### Using HLSL to Write Nodes
 
-安装完成后，您可以按照原插件的使用说明来编写和使用 HLSL 代码：
+After installation, you can follow the original plugin's instructions to write and use HLSL code:
 
-```hlsl
-// @param BaseColor 材质颜色
-// @param Color 渲染结果
+```hlsl ins={"Add your own shading logic":9-11}
+// @param BaseColor Material color
+// @param Color Render result
 void SampleNode(float3 BaseColor,
 	out float3 Color,
 	FMaterialPixelParameters Parameters)
@@ -70,46 +71,46 @@ void SampleNode(float3 BaseColor,
     Color = BaseColor * ...;
 }
 ```
-这会生成一个名为 `SampleNode` 的自定义函数节点，该函数节点接收 `BaseColor` 并输出 `Color` 颜色。
+This will generate a custom function node named `SampleNode` that takes `BaseColor` and outputs `Color` color.
 
-## 在HLSL中使用ERS
+## Using ERS in HLSL
 
-ERS中定义了自定义灯光数据结构，用于存储自定义灯光数据。
+ERS defines a custom light data structure to store custom light data.
 
 ```hlsl
 // CustomLightData.ush
 struct FCustomLight
 {
-    float3 L;               // 灯光方向
-    float3 Color;           // 灯光颜色
-    float Attenuation;      // 灯光衰减
-    float Shadow;           // 灯光阴影
-    float SpecularScale;    // 镜面反射
-    bool bIsRect;           // 是否是矩形灯
+    float3 L;               // Light direction
+    float3 Color;           // Light color
+    float Attenuation;      // Light attenuation
+    float Shadow;           // Light shadow
+    float SpecularScale;    // Specular reflection
+    bool bIsRect;           // Is it a rectangular light
 };
 ```
-ERS向引擎注入LightPacket结构体来存储自定义灯光数据。
+ERS injects the LightPacket structure to store custom light data.
 
-```hlsl
+```
 // CustomLightData.ush
 struct FCustomLightPacket
 {
-	uint NumLights; // 当前块中灯光数量
-	bool bHasDirectionalLight; // 当有平行光启用吗
-	FCustomLight DirectionalLight; // 平行光
-	FCustomLight Lights[NUM_CUSTOM_LIGHTS]; // 其他灯光
+	uint NumLights; // Number of lights in the current block
+	bool bHasDirectionalLight; // Is directional light enabled
+	FCustomLight DirectionalLight; // Directional light
+	FCustomLight Lights[NUM_CUSTOM_LIGHTS]; // Other lights
 	float SSAO; // SSAO
 
-	float3 BakedDiffuseLighting; // 预烘培全局光照漫反射
-	float3 BakedSubsurfaceLighting; // 预烘培全局光照次表面
-	float3 Reflections; // 预烘培全局光照镜面反射
+	float3 BakedDiffuseLighting; // Baked global lighting diffuse
+	float3 BakedSubsurfaceLighting; // Baked global lighting subsurface
+	float3 Reflections; // Baked global lighting reflections
 };
 ```
-在蓝图节点中使用 `CustomLightPack` 即可访问以上自定义灯光数据。
+You can access the above custom light data using `CustomLightPack` in blueprint nodes.
 
-在自定义HLSL节点中，您可以使用以下代码来计算自定义灯光。
+In custom HLSL nodes, you can use the following code to calculate custom lights.
 
-```hlsl ins={"添加你自己的主光源光照逻辑":3-5} ins={"添加你自己的光照逻辑":11-13}
+```hlsl ins={"Add your own shading logic":3-5} ins={"Add your own shading logic":11-13}
 FCustomLight DirLight = CustomLightPack.DirectionalLight;
 
 
