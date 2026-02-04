@@ -7,10 +7,16 @@ import { Steps } from '@astrojs/starlight/components';
 import { FileTree } from '@astrojs/starlight/components';
 import { LinkCard } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
+import {YouTube} from 'astro-lazy-youtube-embed';
 
 <Aside type="tip" title="Welcome!">
 👋 This is the help page for ERS, which can help you get started quickly and choose a rendering pipeline according to your project needs.
 </Aside>
+
+<YouTube
+  title="ERS feature quickstart"
+  videoId="ShsLfxCTcFA"
+/>
 
 ## 1. What is ERS
 
@@ -20,7 +26,8 @@ Since native rendering pipelines are used, ERS materials are compatible with mos
 
 <LinkCard
     title="FAB Store"
-    href="com.epicgames.launcher://ue/Fab/product/b8cd33e0-1007-4aae-87c3-3d8039dc091b"
+    href="https://www.fab.com/listings/b8cd33e0-1007-4aae-87c3-3d8039dc091b"
+    target="_blank"
 />
 
 ## 2. How to Configure ERS
