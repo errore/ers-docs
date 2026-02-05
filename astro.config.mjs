@@ -20,6 +20,18 @@ export default defineConfig({
   site: 'https://ers.errore.ink',
   integrations: [starlight({
     title: 'ERS',
+    social: [
+      {
+        icon: 'github',
+        label: 'GitHub',
+        href: 'https://github.com/errore/ers-docs',
+       },
+       {
+        icon: 'discord',
+        label: 'Discord',
+        href: 'https://discord.gg/yv9zzhPP88',
+      },
+    ],
     editLink: {
       baseUrl: 'https://github.com/errore/ers-docs/edit/master/',
     },
