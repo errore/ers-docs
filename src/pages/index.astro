@@ -1,106 +1,26 @@
 ---
 import "../styles/global.css";
+import "flag-icons/css/flag-icons.min.css";
 
-const acceptLang = Astro.request.headers.get("accept-language");
-const targetLang = acceptLang?.includes("zh") ? "zh-cn" : "en";
+const lang = Astro.currentLocale || 'en';
+const t = Astro.locals.t;
 
-const i18n = {
-  "zh-cn": {
-    gettingStarted: "开始使用",
-    title: "欢迎使用ERS",
-    subtitle: "增强UE渲染解决方案",
-    description: "ERS是一款针对Unreal Engine的纯插件渲染解决方案，让您在蓝图内完全自定义渲染效果——控制光源、阴影、全局光照等。无需修改引擎源码，零Shell操作，安全隔离，即插即用。",
-    scrollDown: "向下滚动了解更多",
-    featuresTitle: "核心优势",
-    plugAndPlayTitle: "即插即用",
-    plugAndPlayDesc: "纯插件架构，零引擎文件修改。通过虚幻引擎原生插件系统实现安全隔离，启用即生效，禁用即卸载。兼容UE 5.4-5.7版本。",
-    deferredTitle: "延迟渲染",
-    deferredDesc: "仅需两个节点完成设置，获取主光源信息并无缝融合Lumen全局光照。",
-    deferredFeature1: "与Lumen全局光照无缝融合",
-    deferredFeature2: "两个节点快速集成",
-    deferredFeature3: "光照风格控制",
-    comingSoon: "即将推出",
-    forwardTitle: "前向渲染",
-    forwardDesc: "完全控制材质外观，支持自定义HLSL编写和高级光照选项。",
-    forwardFeature1: "完全控制材质外观",
-    forwardFeature2: "支持自定义HLSL编写",
-    forwardFeature3: "高级光照选项",
-    ctaTitle: "准备开始了吗？",
-    ctaSubtitle: "浏览文档了解如何将ERS集成到您的项目中。",
-    nodeDemoDeferred: "延迟渲染管线",
-    nodeDemoForward: "前向渲染管线",
-    copyHint: "直接复制节点到虚幻引擎",
-    learnMore: "了解更多",
-    faqTitle: "常见问题",
-    faqQ1: "ERS支持哪些UE版本？",
-    faqA1: "ERS支持UE 5.4至UE 5.7版本的虚幻引擎。",
-    faqQ2: "ERS是免费的吗？",
-    faqA2: "ERS当前售价 $39.9，完成移动端支持后调整至 $49.9。一次性付费，包含完整功能及后续更新支持。独立游戏友好售价，助力开发者提升渲染效果。",
-    faqQ3: "ERS兼容哪些渲染管线？",
-    faqA3: "ERS同时支持延迟渲染管线和前向渲染管线，您可以根据项目需求选择合适的渲染管线。",
-    faqQ4: "ERS是否安全可靠？",
-    faqA4: "ERS采用纯插件架构，无需执行任何Shell操作或修改引擎文件。插件仅在被激活的项目中运行，禁用即可完全卸载，不会影响其他项目。",
-    faqQ5: "ERS支持蓝图内的光源吗？",
-    faqA5: "支持。ERS通过虚幻引擎原生渲染系统识别光源，因此即使是嵌套在Actor（如蓝图）中的标准虚幻引擎灯光组件也能被正确识别。",
-  },
-  en: {
-    gettingStarted: "Get Started",
-    title: "Welcome to ERS",
-    subtitle: "Enhanced Rendering Solution for Unreal Engine",
-    description: "ERS is a pure plugin rendering solution for Unreal Engine that enables full rendering customization within blueprints—control lights, shadows, global illumination, and more. No engine source modifications required, zero Shell operations, safe isolation, plug and play.",
-    scrollDown: "Scroll to explore",
-    featuresTitle: "Key Features",
-    plugAndPlayTitle: "Plug & Play",
-    plugAndPlayDesc: "Pure plugin architecture with zero engine file modifications. Safe isolation through Unreal Engine's native plugin system. Enable to activate, disable to uninstall. Compatible with UE 5.4-5.7.",
-    deferredTitle: "Deferred Rendering",
-    deferredDesc: "Simple setup with just two nodes. Get main light info and blend with Lumen GI seamlessly.",
-    deferredFeature1: "Seamless Lumen GI integration",
-    deferredFeature2: "Two-node quick setup",
-    deferredFeature3: "Light Style Control",
-    comingSoon: "Coming Soon",
-    forwardTitle: "Forward Rendering",
-    forwardDesc: "Full control over material appearance with custom HLSL support and advanced lighting options.",
-    forwardFeature1: "Full material appearance control",
-    forwardFeature2: "Custom HLSL support",
-    forwardFeature3: "Advanced lighting options",
-    ctaTitle: "Ready to Get Started?",
-    ctaSubtitle: "Explore the documentation to learn how to integrate ERS into your project.",
-    nodeDemoDeferred: "Deferred Rendering Pipeline",
-    nodeDemoForward: "Forward Rendering Pipeline",
-    copyHint: "Copy nodes directly to Unreal Engine",
-    learnMore: "Learn More",
-    faqTitle: "FAQ",
-    faqQ1: "Which UE versions does ERS support?",
-    faqA1: "ERS supports Unreal Engine 5.4 to 5.7.",
-    faqQ2: "What's the pricing?",
-    faqA2: "ERS is currently priced at $39.9, adjusting to $49.9 after mobile support is complete. One-time purchase includes full features and future updates. Indie-friendly pricing to empower developers to enhance their rendering.",
-    faqQ3: "Which rendering pipelines does ERS support?",
-    faqA3: "ERS supports both deferred and forward rendering pipelines. Choose the appropriate pipeline based on your project requirements.",
-    faqQ4: "Is ERS safe and reliable?",
-    faqA4: "ERS uses a pure plugin architecture with no Shell operations or engine file modifications. The plugin only runs in activated projects and fully uninstalls when disabled, never affecting other projects.",
-    faqQ5: "Does ERS support lights inside blueprints?",
-    faqA5: "Yes. ERS identifies lights through Unreal Engine's native rendering system, so even standard UE light components nested in Actors (like blueprints) are correctly recognized.",
-  },
-};
-
-const t = (key: string) => {
-  return i18n[targetLang as keyof typeof i18n][
-    key as keyof (typeof i18n)["zh-cn"]
-  ];
-};
-
-export const prerender = false;
+const languages = [
+  { code: 'en', label: 'English', flag: 'gb' },
+  { code: 'zh-cn', label: '中文', flag: 'cn' },
+];
+const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
 ---
 
-<html lang={targetLang}>
+<html lang={lang}>
   <head>
-    <title>ERS - {t("subtitle")}</title>
+    <title>ERS - {t("landing.subtitle")}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={t("description")} />
+    <meta name="description" content={t("landing.description")} />
   </head>
   <body class="bg-[#F4F4EF] text-[#1a1a1a] overflow-x-hidden">
-    <header class="fixed top-0 z-50 w-full h-[68px] px-5 md:px-20 bg-[#F4F4EF] border-b border-[#E0DFD6]">
+    <header class="fixed top-0 z-50 w-full h-17 px-5 md:px-20 bg-[#F4F4EF] border-b border-[#E0DFD6]">
       <div class="flex justify-between items-center h-full max-w-7xl mx-auto">
         <a href="/" class="flex items-center">
           <svg viewBox="0 0 850 284" class="h-8 w-auto">
@@ -116,13 +36,13 @@ export const prerender = false;
         
         <nav class="hidden lg:flex items-center gap-3">
           <button id="nav-features" class="px-4 py-2 text-sm font-normal hover:font-medium rounded-full transition-colors text-[#1a1a1a] cursor-pointer">
-            {t("featuresTitle")}
+            {t("landing.featuresTitle")}
           </button>
           <button id="nav-deferred" class="px-4 py-2 text-sm font-normal hover:font-medium rounded-full transition-colors text-[#1a1a1a] cursor-pointer">
-            {t("deferredTitle")}
+            {t("landing.deferredTitle")}
           </button>
           <button id="nav-forward" class="px-4 py-2 text-sm font-normal hover:font-medium rounded-full transition-colors text-[#1a1a1a] cursor-pointer">
-            {t("forwardTitle")}
+            {t("landing.forwardTitle")}
           </button>
         </nav>
 
@@ -143,13 +63,35 @@ export const prerender = false;
               <path d="M43.4544 13.541H40.0328L39.7663 14.9092H43.1879C43.5434 14.9092 43.805 14.8052 43.9731 14.5968C44.1113 14.4285 44.1806 14.2597 44.1806 14.0914C44.1806 13.7247 43.9384 13.541 43.4547 13.541H43.4544Z" fill="currentColor"/>
               <path d="M42.9356 17.1543H39.3363L39.055 18.6116H42.6394C43.0341 18.6116 43.3157 18.5027 43.4838 18.2846C43.543 18.2052 43.5922 18.1162 43.6317 18.0167C43.6712 17.9179 43.691 17.8285 43.691 17.7492C43.691 17.3526 43.4391 17.1543 42.9356 17.1543Z" fill="currentColor"/>
             </svg>
-            <span class="hidden md:inline">{targetLang === 'zh-cn' ? '商店' : 'Fab Store'}</span>
+            <span class="hidden md:inline">{t("landing.fabStore")}</span>
           </a>
+          <div class="relative" id="lang-switcher-container">
+            <button
+              id="lang-switcher"
+              class="flex items-center gap-2 px-2 md:px-3 py-1.5 text-sm text-[#7F7F7F] hover:text-[#1a1a1a] hover:bg-[#1a1a1a]/5 rounded-full transition-colors"
+              aria-label="Switch language"
+            >
+              <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M4 0H6V2H10V4H8.86807C8.57073 5.66996 7.78574 7.17117 6.6656 8.35112C7.46567 8.73941 8.35737 8.96842 9.29948 8.99697L10.2735 6H12.7265L15.9765 16H13.8735L13.2235 14H9.77647L9.12647 16H7.0235L8.66176 10.9592C7.32639 10.8285 6.08165 10.3888 4.99999 9.71246C3.69496 10.5284 2.15255 11 0.5 11H0V9H0.5C1.5161 9 2.47775 8.76685 3.33437 8.35112C2.68381 7.66582 2.14629 6.87215 1.75171 6H4.02179C4.30023 6.43491 4.62904 6.83446 4.99999 7.19044C5.88743 6.33881 6.53369 5.23777 6.82607 4H0V2H4V0ZM12.5735 12L11.5 8.69688L10.4265 12H12.5735Z"></path>
+              </svg>
+            </button>
+            <div id="lang-dropdown" class="hidden absolute right-0 top-full mt-2 py-2 bg-white rounded-xl shadow-lg border border-[#E0DFD6] min-w-[140px] z-50">
+              {otherLangs.map(l => (
+                <a
+                  href={`/${l.code}`}
+                  class="flex items-center gap-2 px-4 py-2 text-sm text-[#1a1a1a] hover:bg-[#F4F4EF] transition-colors"
+                >
+                  <span class={`fi fi-${l.flag}`}></span>
+                  <span>{l.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
           <button
             id="header-cta"
             class="px-4 md:px-5 py-2 h-9 text-sm rounded-full bg-[#1a1a1a] text-white hover:bg-[#333333] transition-colors whitespace-nowrap"
           >
-            {t("gettingStarted")}
+            {t("landing.gettingStarted")}
           </button>
         </div>
       </div>
@@ -161,23 +103,23 @@ export const prerender = false;
           <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-10 lg:gap-20">
             <div class="text-left max-w-xl">
               <h1 class="text-[40px] md:text-[48px] font-semibold mb-6 text-[#000000F2] leading-[1.2]" style="font-family: Georgia, 'Times New Roman', serif;">
-                {t("title")}
+                {t("landing.title")}
               </h1>
               <p class="text-base md:text-lg text-[#7F7F7F] mb-8 leading-[1.6]">
-                {t("description")}
+                {t("landing.description")}
               </p>
               <div class="flex gap-4 flex-col sm:flex-row">
                 <button
                   id="hero-primary-btn"
                   class="px-8 py-3 h-[52px] text-base rounded-full bg-[#1a1a1a] text-white hover:bg-[#333333] transition-all hover:scale-105 font-medium"
                 >
-                  {t("gettingStarted")}
+                  {t("landing.gettingStarted")}
                 </button>
                 <button
                   id="hero-secondary-btn"
                   class="px-8 py-3 h-[52px] text-base rounded-full border border-[#1a1a1a]/20 text-[#1a1a1a] hover:bg-[#1a1a1a]/5 transition-colors font-medium"
                 >
-                  {t("learnMore")}
+                  {t("landing.learnMore")}
                 </button>
               </div>
             </div>
@@ -196,7 +138,7 @@ export const prerender = false;
           </div>
           
           <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#7F7F7F] animate-bounce cursor-pointer" id="scroll-indicator">
-            <span class="text-sm">{t("scrollDown")}</span>
+            <span class="text-sm">{t("landing.scrollDown")}</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
@@ -207,7 +149,7 @@ export const prerender = false;
       <section id="features" class="py-20 md:py-32 bg-white">
         <div class="container mx-auto px-5 md:px-20 max-w-7xl">
           <h2 class="text-[32px] md:text-[40px] font-semibold text-center mb-16 text-[#1a1a1a]" style="font-family: Georgia, 'Times New Roman', serif;">
-            {t("featuresTitle")}
+            {t("landing.featuresTitle")}
           </h2>
           
           <div class="grid md:grid-cols-3 gap-6 md:gap-8">
@@ -217,8 +159,8 @@ export const prerender = false;
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("plugAndPlayTitle")}</h3>
-              <p class="text-[#656565] text-sm leading-relaxed">{t("plugAndPlayDesc")}</p>
+              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("landing.plugAndPlayTitle")}</h3>
+              <p class="text-[#656565] text-sm leading-relaxed">{t("landing.plugAndPlayDesc")}</p>
             </div>
 
             <div class="feature-card group p-6 md:p-8 rounded-2xl bg-[#F4F4EF] border border-[#E0DFD6] hover:border-[#16a34a]/30 hover:shadow-lg transition-all duration-300">
@@ -227,8 +169,8 @@ export const prerender = false;
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("deferredTitle")}</h3>
-              <p class="text-[#656565] text-sm leading-relaxed">{t("deferredDesc")}</p>
+              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("landing.deferredTitle")}</h3>
+              <p class="text-[#656565] text-sm leading-relaxed">{t("landing.deferredDesc")}</p>
             </div>
 
             <div class="feature-card group p-6 md:p-8 rounded-2xl bg-[#F4F4EF] border border-[#E0DFD6] hover:border-[#4646B9]/30 hover:shadow-lg transition-all duration-300">
@@ -237,8 +179,8 @@ export const prerender = false;
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("forwardTitle")}</h3>
-              <p class="text-[#656565] text-sm leading-relaxed">{t("forwardDesc")}</p>
+              <h3 class="text-xl font-semibold mb-2 text-[#1a1a1a]">{t("landing.forwardTitle")}</h3>
+              <p class="text-[#656565] text-sm leading-relaxed">{t("landing.forwardDesc")}</p>
             </div>
           </div>
         </div>
@@ -254,23 +196,23 @@ export const prerender = false;
             </div>
             <div class="lg:w-1/2">
               <h2 class="text-[28px] md:text-[36px] font-semibold mb-4 text-[#1a1a1a]" style="font-family: Georgia, 'Times New Roman', serif;">
-                {t("deferredTitle")}
+                {t("landing.deferredTitle")}
               </h2>
               <p class="text-[#656565] text-base leading-relaxed mb-6">
-                {t("deferredDesc")}
+                {t("landing.deferredDesc")}
               </p>
               <ul class="space-y-3">
                 <li class="flex items-center gap-3 text-[#1a1a1a]">
                   <span class="w-2 h-2 rounded-full bg-[#16a34a]"></span>
-                  <span>{t("deferredFeature1")}</span>
+                  <span>{t("landing.deferredFeature1")}</span>
                 </li>
                 <li class="flex items-center gap-3 text-[#1a1a1a]">
                   <span class="w-2 h-2 rounded-full bg-[#16a34a]"></span>
-                  <span>{t("deferredFeature2")}</span>
+                  <span>{t("landing.deferredFeature2")}</span>
                 </li>
                 <li class="flex items-center gap-3 text-[#656565]">
                   <span class="w-2 h-2 rounded-full bg-[#9CA3AF]"></span>
-                  <span>{t("deferredFeature3")} <span class="text-xs bg-[#D4D4CF] text-[#4B4B4B] px-2 py-0.5 rounded-full ml-1">{t("comingSoon")}</span></span>
+                  <span>{t("landing.deferredFeature3")} <span class="text-xs bg-[#D4D4CF] text-[#4B4B4B] px-2 py-0.5 rounded-full ml-1">{t("landing.comingSoon")}</span></span>
                 </li>
               </ul>
             </div>
@@ -288,23 +230,23 @@ export const prerender = false;
             </div>
             <div class="lg:w-1/2">
               <h2 class="text-[28px] md:text-[36px] font-semibold mb-4 text-[#1a1a1a]" style="font-family: Georgia, 'Times New Roman', serif;">
-                {t("forwardTitle")}
+                {t("landing.forwardTitle")}
               </h2>
               <p class="text-[#656565] text-base leading-relaxed mb-6">
-                {t("forwardDesc")}
+                {t("landing.forwardDesc")}
               </p>
               <ul class="space-y-3">
                 <li class="flex items-center gap-3 text-[#1a1a1a]">
                   <span class="w-2 h-2 rounded-full bg-[#4646B9]"></span>
-                  <span>{t("forwardFeature1")}</span>
+                  <span>{t("landing.forwardFeature1")}</span>
                 </li>
                 <li class="flex items-center gap-3 text-[#1a1a1a]">
                   <span class="w-2 h-2 rounded-full bg-[#4646B9]"></span>
-                  <span>{t("forwardFeature2")}</span>
+                  <span>{t("landing.forwardFeature2")}</span>
                 </li>
                 <li class="flex items-center gap-3 text-[#1a1a1a]">
                   <span class="w-2 h-2 rounded-full bg-[#4646B9]"></span>
-                  <span>{t("forwardFeature3")}</span>
+                  <span>{t("landing.forwardFeature3")}</span>
                 </li>
               </ul>
             </div>
@@ -317,7 +259,7 @@ export const prerender = false;
           <div class="flex flex-col md:flex-row gap-10 md:gap-20">
             <div class="md:w-1/3">
               <h2 class="text-[32px] md:text-[40px] font-semibold text-[#1a1a1a]" style="font-family: Georgia, 'Times New Roman', serif;">
-                {t("faqTitle")}
+                {t("landing.faqTitle")}
               </h2>
             </div>
             
@@ -325,61 +267,61 @@ export const prerender = false;
               <div class="flex flex-col gap-4">
                 <div class="faq-item rounded-2xl bg-[#EBEBE6] border border-[#DCDCD7] overflow-hidden">
                   <button class="faq-toggle w-full text-left p-5 md:p-6 flex justify-between items-center cursor-pointer">
-                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("faqQ1")}</span>
+                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("landing.faqQ1")}</span>
                     <svg class="faq-icon w-5 h-5 text-[#7F7F7F] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   </button>
                   <div class="faq-content overflow-hidden max-h-0 transition-all duration-300">
-                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("faqA1")}</p>
+                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("landing.faqA1")}</p>
                   </div>
                 </div>
 
                 <div class="faq-item rounded-2xl bg-[#EBEBE6] border border-[#DCDCD7] overflow-hidden">
                   <button class="faq-toggle w-full text-left p-5 md:p-6 flex justify-between items-center cursor-pointer">
-                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("faqQ2")}</span>
+                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("landing.faqQ2")}</span>
                     <svg class="faq-icon w-5 h-5 text-[#7F7F7F] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   </button>
                   <div class="faq-content overflow-hidden max-h-0 transition-all duration-300">
-                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("faqA2")}</p>
+                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("landing.faqA2")}</p>
                   </div>
                 </div>
 
                 <div class="faq-item rounded-2xl bg-[#EBEBE6] border border-[#DCDCD7] overflow-hidden">
                   <button class="faq-toggle w-full text-left p-5 md:p-6 flex justify-between items-center cursor-pointer">
-                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("faqQ3")}</span>
+                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("landing.faqQ3")}</span>
                     <svg class="faq-icon w-5 h-5 text-[#7F7F7F] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   </button>
                   <div class="faq-content overflow-hidden max-h-0 transition-all duration-300">
-                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("faqA3")}</p>
+                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("landing.faqA3")}</p>
                   </div>
                 </div>
 
                 <div class="faq-item rounded-2xl bg-[#EBEBE6] border border-[#DCDCD7] overflow-hidden">
                   <button class="faq-toggle w-full text-left p-5 md:p-6 flex justify-between items-center cursor-pointer">
-                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("faqQ4")}</span>
+                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("landing.faqQ4")}</span>
                     <svg class="faq-icon w-5 h-5 text-[#7F7F7F] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   </button>
                   <div class="faq-content overflow-hidden max-h-0 transition-all duration-300">
-                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("faqA4")}</p>
+                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("landing.faqA4")}</p>
                   </div>
                 </div>
 
                 <div class="faq-item rounded-2xl bg-[#EBEBE6] border border-[#DCDCD7] overflow-hidden">
                   <button class="faq-toggle w-full text-left p-5 md:p-6 flex justify-between items-center cursor-pointer">
-                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("faqQ5")}</span>
+                    <span class="text-base md:text-lg font-medium text-[#1a1a1a]">{t("landing.faqQ5")}</span>
                     <svg class="faq-icon w-5 h-5 text-[#7F7F7F] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   </button>
                   <div class="faq-content overflow-hidden max-h-0 transition-all duration-300">
-                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("faqA5")}</p>
+                    <p class="px-5 md:px-6 pb-5 md:pb-6 text-[#656565]">{t("landing.faqA5")}</p>
                   </div>
                 </div>
               </div>
@@ -391,17 +333,17 @@ export const prerender = false;
       <section class="py-20 md:py-32 bg-white">
         <div class="container mx-auto px-5 max-w-4xl text-center">
           <h2 class="text-[32px] md:text-[40px] font-semibold mb-4 text-[#1a1a1a]" style="font-family: Georgia, 'Times New Roman', serif;">
-            {t("ctaTitle")}
+            {t("landing.ctaTitle")}
           </h2>
           <p class="text-[#656565] mb-8">
-            {t("ctaSubtitle")}
+            {t("landing.ctaSubtitle")}
           </p>
           
           <button
             id="cta-button"
             class="px-10 py-4 text-base rounded-full bg-[#1a1a1a] text-white hover:bg-[#333333] transition-all hover:scale-105 font-medium"
           >
-            {t("gettingStarted")}
+            {t("landing.gettingStarted")}
           </button>
         </div>
       </section>
@@ -420,9 +362,10 @@ export const prerender = false;
               <path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.09l.02.02a19.9 19.9 0 0 0 6.04 3.03l.04-.02a14.24 14.24 0 0 0 1.23-2.03.08.08 0 0 0-.05-.07 13.1 13.1 0 0 1-1.9-.92.08.08 0 0 1 .02-.1 10.2 10.2 0 0 0 .41-.31h.04a14.2 14.2 0 0 0 12.1 0l.04.01a9.63 9.63 0 0 0 .4.32.08.08 0 0 1-.03.1 12.29 12.29 0 0 1-1.9.91.08.08 0 0 0-.02.1 15.97 15.97 0 0 0 1.27 2.01h.04a19.84 19.84 0 0 0 6.03-3.05v-.03a20.12 20.12 0 0 0-3.57-13.69ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/>
             </svg>
           </a>
+          <span class="text-[#7F7F7F] text-sm">© 2026 ErrorWings</span>
         </div>
         <p class="text-[#7F7F7F] text-sm">
-          ERS - Enhanced Rendering Solution
+          {t("landing.footerBranding")}
         </p>
       </div>
     </footer>
@@ -452,7 +395,7 @@ export const prerender = false;
   <script>
     function goToDocs() {
     var lang = document.documentElement.lang || 'en';
-    var docsUrl = '/' + (lang === 'zh-cn' ? 'zh-cn' : 'en') + '/getting-started';
+    var docsUrl = '/' + lang.toLocaleLowerCase() + '/getting-started';
     window.location.href = docsUrl;
   }
 
@@ -511,6 +454,18 @@ export const prerender = false;
       scrollIndicator.addEventListener("click", function() {
         var features = document.getElementById("features");
         if (features) features.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+
+    var langSwitcher = document.getElementById("lang-switcher");
+    var langDropdown = document.getElementById("lang-dropdown");
+    if (langSwitcher && langDropdown) {
+      langSwitcher.addEventListener("click", function(e) {
+        e.stopPropagation();
+        langDropdown.classList.toggle("hidden");
+      });
+      document.addEventListener("click", function() {
+        langDropdown.classList.add("hidden");
       });
     }
 

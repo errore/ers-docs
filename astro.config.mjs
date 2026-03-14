@@ -94,7 +94,7 @@ export default defineConfig({
         svgPath: 'M5 15L12 8L19 15',
       })
     ],
-    defaultLocale: 'zh-cn',
+    defaultLocale: 'en',
     locales: {
       'zh-cn': {
         label: '简体中文',
