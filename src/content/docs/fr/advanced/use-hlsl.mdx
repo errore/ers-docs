@@ -1,0 +1,129 @@
+---
+title: Utilisation de HLSL dans le pipeline de rendu direct
+---
+
+import { LinkCard } from '@astrojs/starlight/components';
+import { FileTree } from '@astrojs/starlight/components';
+
+
+## Utilisation du plugin HLSL
+
+Il est fortement recommandé d'utiliser le plugin `HLSL Material` pour écrire du code HLSL.
+
+Alternativement, vous pouvez utiliser directement le nœud `Custom` pour écrire du code HLSL.
+
+<LinkCard
+    title="Passer cette section sans utiliser de plugins"
+    href="#utilisation-ders-en-hlsl"
+/>
+
+### Installation du plugin HLSL Material
+
+:::tip
+Ce plugin fournit la fonctionnalité de **générer automatiquement des nœuds de fonction** à partir de fonctions HLSL, simplifiant le processus d'utilisation du code HLSL dans les matériaux.
+:::
+
+Le plugin original ne peut pas être compilé correctement dans les versions UE 5.6+, et l'auteur peut avoir arrêté sa maintenance. Je propose une version corrigée que vous pouvez télécharger depuis le dépôt Github ci-dessous, puis décompresser dans le répertoire Plugins :
+
+<LinkCard
+    title="Plugin HLSL Material"
+    href="https://github.com/errore/HLSLMaterial"
+    description="Version corrigée pour UE 5.6+"
+    target="_blank"
+/>
+
+Après l'installation, la structure de votre projet devrait ressembler à ceci :
+
+<FileTree>
+
+- YourProjectRoot
+    - ...
+    - Plugins
+        - **HLSLMaterial-master**
+            - HLSLMaterial.uplugin
+            - ...
+    - ...
+
+</FileTree>
+
+Vous pouvez également cloner directement le répertoire Plugins de votre projet en utilisant la commande suivante :
+
+```
+git clone https://github.com/errore/HLSLMaterial.git
+```
+
+### Utilisation de HLSL pour écrire des nœuds
+
+Après l'installation, vous pouvez suivre les instructions du plugin original pour écrire et utiliser du code HLSL :
+
+```hlsl ins={"Ajoutez votre propre logique d'ombrage":9-11}
+// @param BaseColor Couleur du matériau
+// @param Color Résultat du rendu
+void SampleNode(float3 BaseColor,
+	out float3 Color,
+	FMaterialPixelParameters Parameters)
+{
+    float3 V = normalize(Parameters.CameraVector);
+    float3 N = Parameters.WorldNormal;
+
+    ...
+
+    Color = BaseColor * ...;
+}
+```
+Cela générera un nœud de fonction personnalisé nommé `SampleNode` qui prend `BaseColor` et sort la couleur `Color`.
+
+## Utilisation d'ERS en HLSL
+
+ERS définit une structure de données de lumière personnalisée pour stocker les données de lumière personnalisées.
+
+```hlsl
+// CustomLightData.ush
+struct FCustomLight
+{
+    float3 L;               // Direction de la lumière
+    float3 Color;           // Couleur de la lumière
+    float Attenuation;      // Atténuation de la lumière
+    float Shadow;           // Ombre de la lumière
+    float SpecularScale;    // Réflexion spéculaire
+    bool bIsRect;           // Est-ce une lumière rectangulaire
+};
+```
+ERS injecte la structure LightPacket pour stocker les données de lumière personnalisées.
+
+```
+// CustomLightData.ush
+struct FCustomLightPacket
+{
+	uint NumLights; // Nombre de lumières dans le bloc actuel
+	bool bHasDirectionalLight; // La lumière directionnelle est-elle activée
+	FCustomLight DirectionalLight; // Lumière directionnelle
+	FCustomLight Lights[NUM_CUSTOM_LIGHTS]; // Autres lumières
+	float SSAO; // SSAO
+
+	float3 BakedDiffuseLighting; // Éclairage global diffus pré-calculé
+	float3 BakedSubsurfaceLighting; // Éclairage global subsurface pré-calculé
+	float3 Reflections; // Réflexions pré-calculées de l'éclairage global
+};
+```
+Vous pouvez accéder aux données de lumière personnalisées ci-dessus en utilisant `CustomLightPack` dans les nœuds blueprint.
+
+Dans les nœuds HLSL personnalisés, vous pouvez utiliser le code suivant pour calculer les lumières personnalisées.
+
+```hlsl ins={"Ajoutez votre propre logique d'ombrage":3-5} ins={"Ajoutez votre propre logique d'ombrage":11-13}
+FCustomLight DirLight = CustomLightPack.DirectionalLight;
+
+
+float Shadow = DirLight.Shadow;
+...
+
+for (int i = 0; i < CustomLightPack.NumLights; i++)
+{
+    FCustomLight Light = CustomLightPack.Lights[i];
+
+
+    float NoL = dot(Light.L, N);
+    ...
+
+}
+```

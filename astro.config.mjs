@@ -51,6 +51,7 @@ export default defineConfig({
         translations: {
           'en': 'Getting Started',
           'zh-cn': '入门',
+          'fr': 'Pour commencer',
         },
       },
       {
@@ -59,6 +60,7 @@ export default defineConfig({
         translations: {
           'en': 'Using ERS Material Nodes',
           'zh-cn': '使用ERS材质节点',
+          'fr': 'Utilisation des nœuds de matériau ERS',
         },
       },
       {
@@ -67,6 +69,7 @@ export default defineConfig({
         translations: {
           'en': 'Advanced Guides',
           'zh-cn': '进阶指南',
+          'fr': 'Guides avancés',
         },
       },
       {
@@ -75,6 +78,7 @@ export default defineConfig({
         translations: {
           'en': 'FAQ',
           'zh-cn': '常见问题',
+          'fr': 'FAQ',
         },
       }
     ],
@@ -103,6 +107,10 @@ export default defineConfig({
       'en': {
         label: 'English',
         lang: 'en',
+      },
+      'fr': {
+        label: 'Français',
+        lang: 'fr',
       },
     }
   }), react()],

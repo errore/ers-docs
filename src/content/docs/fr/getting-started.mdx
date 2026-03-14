@@ -1,0 +1,83 @@
+---
+title: Bienvenue sur ERS
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { FileTree } from '@astrojs/starlight/components';
+import { LinkCard } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import {YouTube} from 'astro-lazy-youtube-embed';
+
+<Aside type="tip" title="Bienvenue !">
+👋 C'est la page d'aide pour ERS, qui peut vous aider à démarrer rapidement et choisir un pipeline de rendu selon les besoins de votre projet.
+</Aside>
+
+<YouTube
+  title="ERS feature quickstart"
+  videoId="ShsLfxCTcFA"
+/>
+
+## 1. Qu'est-ce que ERS
+
+ERS (Easy Rendering Solution) peut ajouter un support d'éclairage à vos matériaux Unlit, ou utiliser le mode de **rendu direct** pour personnaliser complètement l'apparence de vos matériaux.
+
+Comme les pipelines de rendu natifs sont utilisés, les matériaux ERS sont compatibles avec la plupart des fonctionnalités du moteur, telles que les lightmaps, les réflexions capturées et les effets de post-traitement.
+<CardGrid>
+<LinkCard
+    title="FAB Store"
+    href="https://www.fab.com/listings/b8cd33e0-1007-4aae-87c3-3d8039dc091b"
+    target="_blank"
+/>
+
+<LinkCard
+  title='Discord Chat'
+  href="https://discord.gg/yv9zzhPP88"
+  target="_blank"
+/>
+</CardGrid>
+
+## 2. Comment configurer ERS
+
+<Steps>
+
+1. Lancez votre projet UE, ouvrez la fenêtre `Plugins` et assurez-vous que le plugin ERS est activé.
+
+2. Redémarrez UE pour que les modifications prennent effet.
+
+2. ERS a été configuré dans votre projet, et vous pouvez maintenant commencer à utiliser ERS pour ajouter un support d'éclairage à vos matériaux Unlit 🥳 !
+
+</Steps>
+
+
+
+## 3. Choisir le pipeline de rendu UE que vous souhaitez utiliser
+
+ERS prend en charge deux pipelines de rendu : `Forward Rendering` et `Deferred Rendering`. Vous pouvez choisir le pipeline de rendu approprié en fonction des besoins de votre projet.
+
+<Aside type="tip" title="Comment choisir un pipeline de rendu ?">
+1. Le pipeline de **rendu direct** est adapté à la plupart des situations, tandis que le pipeline de **rendu différé** est adapté aux scènes nécessitant des effets d'éclairage complexes.
+2. Dans ERS, si vous souhaitez `personnaliser complètement` l'apparence de vos matériaux, il est recommandé de choisir le **pipeline de rendu direct**.
+3. Pour les débutants, vous pouvez commencer par la configuration simple du **pipeline de rendu différé**.
+</Aside>
+
+### 3.1 Pipeline de rendu différé
+
+Le pipeline de rendu différé est le pipeline de rendu par défaut d'UE. Aucune configuration supplémentaire n'est requise pour utiliser la fonctionnalité de rendu différé d'ERS.
+
+<Aside type="caution" title="Note">
+
+Si vous utilisez **UE 5.7**, vous devez rechercher `Substrate` dans les paramètres du projet et désactiver l'option `Enable Substrate (Beta)`, sinon ERS ne fonctionnera pas correctement.
+
+</Aside>
+
+<LinkCard title="Comment utiliser ERS en rendu différé ?" href="/fr/nodes/deferred-nodes/" />
+
+### 3.2 Pipeline de rendu direct
+
+Pour utiliser le pipeline de rendu direct, vous devez configurer ce qui suit dans les paramètres de votre projet :
+
+Rechezchez `Forward` dans les paramètres du projet et activez l'option `Use Forward Shading`.
+
+<LinkCard title="Comment utiliser ERS en rendu direct ?" href="/fr/nodes/forward-nodes/" />

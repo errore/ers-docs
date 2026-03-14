@@ -37,5 +37,7 @@
     "landing.comingSoon": "Coming Soon",
     "landing.footerBranding": "ERS - Enhanced Rendering Solution",
     "landing.fabStore": "Fab Store",
+    "landing.deferredSectionTitle": "Deferred Rendering",
+    "landing.forwardSectionTitle": "Forward Rendering",
     "Uebp.copy": "Copy selected node(s) with Ctrl +  C  and paste to Unreal Engine"
 }

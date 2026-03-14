@@ -7,9 +7,13 @@ const t = Astro.locals.t;
 
 const languages = [
   { code: 'en', label: 'English', flag: 'gb' },
+  { code: 'fr', label: 'Français', flag: 'fr' },
   { code: 'zh-cn', label: '中文', flag: 'cn' },
 ];
 const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
+
+const deferredSectionTitle = t("landing.deferredSectionTitle");
+const forwardSectionTitle = t("landing.forwardSectionTitle");
 ---
 
 <html lang={lang}>
@@ -78,7 +82,7 @@ const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
             <div id="lang-dropdown" class="hidden absolute right-0 top-full mt-2 py-2 bg-white rounded-xl shadow-lg border border-[#E0DFD6] min-w-[140px] z-50">
               {otherLangs.map(l => (
                 <a
-                  href={`/${l.code}`}
+                  href={`/${l.code}/`}
                   class="flex items-center gap-2 px-4 py-2 text-sm text-[#1a1a1a] hover:bg-[#F4F4EF] transition-colors"
                 >
                   <span class={`fi fi-${l.flag}`}></span>
@@ -392,10 +396,10 @@ const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
     }
   </style>
 
-  <script>
+  <script define:vars={{ deferredSectionTitle, forwardSectionTitle }}>
     function goToDocs() {
     var lang = document.documentElement.lang || 'en';
-    var docsUrl = '/' + lang.toLocaleLowerCase() + '/getting-started';
+    var docsUrl = '/' + lang.toLocaleLowerCase() + '/getting-started/';
     window.location.href = docsUrl;
   }
 
@@ -431,7 +435,7 @@ const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
         var sections = document.querySelectorAll('section');
         sections.forEach(function(section) {
           var h2 = section.querySelector('h2');
-          if (h2 && (h2.textContent.indexOf('延迟渲染管线') !== -1 || h2.textContent.indexOf('Deferred Rendering Pipeline') !== -1)) {
+          if (h2 && h2.textContent.indexOf(deferredSectionTitle) !== -1) {
             section.scrollIntoView({ behavior: "smooth" });
           }
         });
@@ -443,7 +447,7 @@ const otherLangs = languages.filter(l => l.code !== lang.toLocaleLowerCase());
         var sections = document.querySelectorAll('section');
         sections.forEach(function(section) {
           var h2 = section.querySelector('h2');
-          if (h2 && (h2.textContent.indexOf('前向渲染管线') !== -1 || h2.textContent.indexOf('Forward Rendering Pipeline') !== -1)) {
+          if (h2 && h2.textContent.indexOf(forwardSectionTitle) !== -1) {
             section.scrollIntoView({ behavior: "smooth" });
           }
         });

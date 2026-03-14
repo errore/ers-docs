@@ -37,5 +37,7 @@
     "landing.comingSoon": "即将推出",
     "landing.footerBranding": "ERS - 增强渲染解决方案",
     "landing.fabStore": "商店",
+    "landing.deferredSectionTitle": "延迟渲染",
+    "landing.forwardSectionTitle": "前向渲染",
     "Uebp.copy": "选中节点后可使用 Ctrl +  C  复制节点，然后粘贴到UE中"
 }
