@@ -30,7 +30,7 @@
     "landing.faqA5": "支持。ERS通过修改虚幻引擎原生渲染系统识别光源，因此即使是嵌套在Actor（如蓝图）中的标准虚幻引擎灯光组件也能被正确识别。",
     "landing.deferredFeature1": "两个节点获取主光源信息",
     "landing.deferredFeature2": "无缝融合Lumen全局光照",
-    "landing.deferredFeature3": "完全控制光照能力",
+    "landing.deferredFeature3": "光照风格控制能力",
     "landing.forwardFeature1": "自定义HLSL材质支持",
     "landing.forwardFeature2": "高级光照选项",
     "landing.forwardFeature3": "完全控制材质外观",

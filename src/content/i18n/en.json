@@ -30,7 +30,7 @@
     "landing.faqA5": "Yes. ERS identifies lights through modifications to Unreal Engine's native rendering system, so even standard UE light components nested in Actors (like blueprints) are correctly recognized.",
     "landing.deferredFeature1": "Two-node setup for main light info",
     "landing.deferredFeature2": "Seamless Lumen GI blending",
-    "landing.deferredFeature3": "Full light control capabilities",
+    "landing.deferredFeature3": "Lighting style control capabilities",
     "landing.forwardFeature1": "Custom HLSL material support",
     "landing.forwardFeature2": "Advanced lighting options",
     "landing.forwardFeature3": "Complete material appearance control",
