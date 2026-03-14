@@ -1,0 +1,11 @@
+---
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'zh-cn' } },
+  ];
+}
+export const prerender = true;
+import IndexPage from './index.astro';
+---
+<IndexPage />

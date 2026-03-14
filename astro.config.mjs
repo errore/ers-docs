@@ -108,7 +108,10 @@ export default defineConfig({
   }), react()],
   output: 'server',
   adapter: cloudflare(),
-
+  trailingSlash: 'always',
+  build: {
+    format: 'directory',
+  },
   vite: {
     plugins: [
       tailwindcss(),
