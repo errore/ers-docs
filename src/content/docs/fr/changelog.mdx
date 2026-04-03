@@ -1,0 +1,137 @@
+---
+title: Journal des modifications
+description: Historique des mises à jour ERS
+---
+
+import { Card } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+## Journal des modifications
+
+<Card title="v1.4.0 - 2026-04-01 | Mise à jour de la personnalisation des styles différés">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### ⚠️ CHANGEMENTS RUPTURAIRES
+
+##### Séparation du contrôle de la lumière principale/secondaire différée
+
+- La lumière principale (Main Light) et la lumière secondaire (Other Light) peuvent désormais être contrôlées indépendamment dans le chemin de rendu différé
+- Ce changement peut affecter les matériaux utilisant une logique d'éclairage personnalisée dans les projets existants
+
+<Aside type="caution">
+**Après la mise à niveau** : Vérifiez les effets de superposition de l'éclairage, vous devrez peut-être ajuster les paramètres d'intensité
+</Aside>
+
+---
+
+#### ✨ Nouvelles fonctionnalités
+
+##### Système de configuration de style personnalisé
+
+- Prend en charge la personnalisation des noms d'affichage pour 4 styles de rendu dans les paramètres du projet
+- Chemin de configuration : `Edit → Project Settings → Plugins → Enhanced Rendering Solution`
+- Nécessite un redémarrage de l'éditeur pour prendre effet
+- Voir la page [Configuration de style personnalisé](/fr/advanced/custom-style-config/) pour la documentation détaillée
+
+---
+
+#### 🔧 Améliorations
+
+##### Mise à niveau de la marque
+
+- Le plugin est officiellement renommé **Enhanced Rendering Solution** (abréviation ERS inchangée)
+- Tous les identifiants de marque dans la documentation et l'interface utilisateur ont été synchronisés
+
+</details>
+
+</Card>
+
+<Card title="v1.3.3 2026-03-09 | Mise à jour de compatibilité UE5.4~5.5">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### 🚀 Nouvelles fonctionnalités
+
+##### Support multi-version Unreal Engine
+
+- Ajout de la prise en charge de UE 5.4, UE 5.5
+- Synchronisation de la base de code UE 5.7.3 pour améliorer la stabilité
+
+---
+
+#### 🔄 Mise à jour de la feuille de route et ajustement des priorités
+
+Selon les commentaires de la communauté, j'ajuste les priorités de développement pour répondre à une fonctionnalité très demandée. Plusieurs utilisateurs ont demandé un contrôle étendu des styles d'éclairage dans le rendu différé, avec plus d'options au-delà des valeurs par défaut de transition douce actuelles. Le rendu direct offre déjà une séparation complète lumière/ombre avec des nœuds dédiés.
+
+**Nouvelles priorités :**
+
+- ✅ Livré : Support UE 5.4 & 5.5
+- 🔄 Prochainement : Recherche sur le rendu différé stylisé - recherche et implémentation commencent immédiatement
+- 📱 Plus tard : Support mobile (reporté à fin avril en raison de l'augmentation de la charge de maintenance multi-version)
+
+**Mise à jour des prix :** Comme indiqué précédemment, le prix du plugin augmentera de 10$ lors du lancement du support mobile. Tous les utilisateurs actuels reçoivent toutes les mises à jour futures sans frais supplémentaires.
+
+Feuille de route complète : [GitHub](https://github.com/users/errore/projects/1)
+
+</details>
+
+</Card>
+
+<Card title="v1.3.0 2026-01-23 | Fab Initial Release">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### 🚀 Nouvelles fonctionnalités
+
+##### Pluginisation officielle ERS
+
+- Plugin officiellement publié sur Unreal Engine Marketplace (Fab)
+- Fin des opérations dangereuses sur le code du moteur, remplacé par une installation et gestion standard via plugin
+- Le plugin peut être activé/désactivé indépendamment, sans installateur séparé
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.2.0 2026-01-01 | Mise à jour du rendu différé">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### 🚀 Nouvelles fonctionnalités
+
+##### Prise en charge du rendu différé
+
+- Ajout de la prise en charge du chemin de rendu différé
+- Support du mélange des lumières avec l'éclairage global Lumen en rendu différé
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.0.0 2025-12-13 | Version initiale">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### 🚀 Nouvelles fonctionnalités
+
+##### Fonctionnalités de base du rendu direct
+
+- Chemin de rendu direct uniquement
+- Nœuds fonctionnels de base fournis
+- Gestion et remplacement des fichiers du moteur via l'outil d'installation
+
+---
+
+</details>
+
+</Card>

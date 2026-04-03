@@ -26,3 +26,43 @@
     --color-gray-800: #2e2422;
     --color-gray-900: #1b1716;
 }
+
+.sl-markdown-content table {
+  display: table;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  overflow: hidden; /* 确保圆角生效 */
+  font-size: 0.95rem;
+}
+
+/* 表头样式 */
+.sl-markdown-content thead {
+  background-color: var(--sl-color-bg-nav); /* 使用 Starlight 变量 */
+  border-bottom: 2px solid var(--sl-color-hairline);
+}
+
+.sl-markdown-content th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--sl-color-white);
+}
+
+/* 单元格样式 */
+.sl-markdown-content td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--sl-color-hairline-light);
+  line-height: 1.5;
+}
+
+/* 隔行变色（斑马纹） */
+.sl-markdown-content tr:nth-child(even) {
+  background-color: var(--sl-color-gray-6);
+}
+
+/* 响应式：处理超宽表格在移动端的滚动 */
+.sl-markdown-content :is(table) {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

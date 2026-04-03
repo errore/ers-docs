@@ -1,0 +1,319 @@
+---
+title: Configuration de style personnalisé pour le pipeline de rendu différé
+sidebar:
+  badge:
+    text: Nouveau
+    variant: caution
+---
+
+import Uebp from '~/components/Uebp.astro'
+import { Aside } from '@astrojs/starlight/components';
+
+## Introduction
+
+Le système de configuration de style personnalisé vous permet de personnaliser le style de rendu du pipeline de rendu différé d'ERS. Cette fonctionnalité est **uniquement disponible dans le pipeline de rendu différé**.
+
+<Aside type="note" title="Rendu direct">
+Si vous utilisez le rendu direct, le pipeline de rendu direct offre une personnalisation plus flexible. Veuillez consulter les nœuds et l'exemple de projet Fab dans la documentation <a href="/fr/nodes/forward-nodes/">Forward Rendering Nodes</a>.
+</Aside>
+
+## Styles par défaut (lorsque le style personnalisé est désactivé)
+
+Lorsque **Enable Custom Style** est désactivé, le plugin propose les 4 styles prédéfinis suivants :
+
+| Index de style | Nom du style | Description |
+|----------------|---------------|-------------|
+| Style 1 | UE Native | Ombrage PBR natif d'UE (diffus Lambert + spéculaire GGX) |
+| Style 2 | Adjustable Smooth Toon | Style Toon à lissage adjustable utilisant la transition smoothstep |
+| Style 3 | 1-5 Step Toon | Style Toon multi-niveaux avec anticrénelage 1-5 niveaux |
+| Style 4 | Retro-Reflective | Rétro-réflexion pour créer des effets spéciaux comme les panneaux réfléchissants |
+
+## Configurez votre propre BxDF
+
+Vous pouvez également personnaliser votre propre BxDF en utilisant du code HLSL et les nommer.
+
+Chemin : `Edit → Project Settings → Plugins → Enhanced Rendering Solution`
+
+<Aside type="caution" title="Redémarrage requis">
+Vous devez redémarrer l'éditeur pour que les modifications de configuration prennent effet
+</Aside>
+
+| Paramètre | Description | Valeur par défaut |
+|-----------|-------------|-------------------|
+| Enable Custom Style | Activer le style personnalisé | false |
+| Style 1 Name | Nom d'affichage du style 1 | Style1 |
+| Style 2 Name | Nom d'affichage du style 2 | Style2 |
+| Style 3 Name | Nom d'affichage du style 3 | Style3 |
+| Style 4 Name | Nom d'affichage du style 4 | Style4 |
+
+## Utilisation du commutateur de style dans les matériaux
+
+### Utilisation de DeferredStyleSwitchNode
+
+Ajoutez `DeferredStyleSwitchNode` avant l'entrée **FinalColor** du nœud `DeferredERSMaster` pour permettre la modification du style et l'ajustement des paramètres :
+
+<Uebp height="400px" blueprintData={
+`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_17" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_17'"
+   Begin Object Class=/Script/ERSRuntime.DeferredStyleSwitchNode Name="DeferredStyleSwitchNode_1" ExportPath="/Script/ERSRuntime.DeferredStyleSwitchNode'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_17.DeferredStyleSwitchNode_1'"
+   End Object
+   Begin Object Name="DeferredStyleSwitchNode_1" ExportPath="/Script/ERSRuntime.DeferredStyleSwitchNode'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_17.DeferredStyleSwitchNode_1'"
+      ConstData=0.250000
+      NodeMode=MNF_Style2
+      MaterialExpressionEditorX=160
+      MaterialExpressionEditorY=384
+      MaterialExpressionGuid=5F4C7F864AE50FED1F5FADA111BF9EA3
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.def_mat'"
+   End Object
+   MaterialExpression="/Script/ERSRuntime.DeferredStyleSwitchNode'DeferredStyleSwitchNode_1'"
+   NodePosX=160
+   NodePosY=384
+   NodeGuid=58D021F3437BEE9BE2D29CA198ACC48E
+   CustomProperties Pin (PinId=5AE71C364574733C41E0FEA3C1B35D77,PinName="Color",PinType.PinCategory="optional",PinType.PinSubCategory="rgba",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,DefaultValue="(R=0.000000,G=0.000000,B=0.000000,A=0.000000)",PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=7F29229449F55EFF041B35807F520A14,PinName="Data",PinType.PinCategory="optional",PinType.PinSubCategory="red",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,DefaultValue="0.25",PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=3CBD2C7A41C0916FABBB129115925674,PinName="Output",PinFriendlyName=NSLOCTEXT("MaterialGraphNode", "Space", " "),Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,LinkedTo=(MaterialGraphNode_0 A784E5924610492E05B5FF81407F63EE,),PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_0" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_0'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_0" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_0.MaterialExpressionMaterialFunctionCall_0'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_0" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.def_mat:MaterialGraph_0.MaterialGraphNode_0.MaterialExpressionMaterialFunctionCall_0'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/MaterialFunctions/Master_Lib_GeneratedFunctions/DeferredERSMaster.DeferredERSMaster'"
+      FunctionInputs(0)=(ExpressionInputId=705817DA4046D96CD1225DB8597BBD60,Input=(Expression="/Script/ERSRuntime.DeferredStyleSwitchNode'MaterialGraphNode_17.DeferredStyleSwitchNode_1'",InputName="FinalColor ( = float3(0.5f, 0.5f, 0.5f))"))
+      FunctionInputs(1)=(ExpressionInputId=83E7352F4DAADABC4FD6929A56116819,Input=(OutputIndex=-1,InputName="InEmissiveColor ( = float3(0, 0, 0))"))
+      FunctionInputs(2)=(ExpressionInputId=6F5D091347AB5AB22EC9FDB57379730B,Input=(InputName="SpecularIntensity ( = 0.5f)"))
+      FunctionInputs(3)=(ExpressionInputId=07CC94014F49CBB42BFDC8937343476E,Input=(InputName="RoughnessIntensity ( = 0.5f)"))
+      FunctionInputs(4)=(ExpressionInputId=6E257CCC437F87F60795CB85AE24514F,Input=(InputName="MainLightBrighterIntensity ( = 0)"))
+      FunctionInputs(5)=(ExpressionInputId=E9AD693840C2FCDF934E34910A92917A,Input=(InputName="LightIntensity ( = 0)"))
+      FunctionInputs(6)=(ExpressionInputId=38ACAAEE45D6E6D4409CE1859159C45D,Input=(InputName="LumenSpecIntensity ( = 0)"))
+      FunctionInputs(7)=(ExpressionInputId=F8C443A64F99E04EC3EBA08D1EAE2CB5,Input=(InputName="LumenDiffuseAOIntensity ( = 0)"))
+      FunctionOutputs(0)=(ExpressionOutputId=63C83C264B4F6E4A5CC032AF6F098972,Output=(OutputName="BaseColor"))
+      FunctionOutputs(1)=(ExpressionOutputId=41CAFEFD4D72FF93C2545598FD13A1EA,Output=(OutputName="Metallic"))
+      FunctionOutputs(2)=(ExpressionOutputId=D8A389924A9F3F2A5ECA08BFE4362BE0,Output=(OutputName="Specular"))
+      FunctionOutputs(3)=(ExpressionOutputId=5D8FF8164114FF72E71674AE8F001923,Output=(OutputName="Roughness"))
+      FunctionOutputs(4)=(ExpressionOutputId=DF60BB234118468A8BB4B98816005317,Output=(OutputName="Anisotropy"))
+      FunctionOutputs(5)=(ExpressionOutputId=75E9B40E49EDC2EEB68058BD9114E712,Output=(OutputName="EmissionColor"))
+      FunctionOutputs(6)=(ExpressionOutputId=10D0D31C41EF75E8AAB2FEA60F0CBA32,Output=(OutputName="SubsurfaceColor"))
+      MaterialExpressionEditorX=400
+      MaterialExpressionEditorY=416
+      MaterialExpressionGuid=E8F3D1E34FA05D97BB81FFBEAA0E03E0
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.def_mat'"
+      Outputs(0)=(OutputName="BaseColor")
+      Outputs(1)=(OutputName="Metallic")
+      Outputs(2)=(OutputName="Specular")
+      Outputs(3)=(OutputName="Roughness")
+      Outputs(4)=(OutputName="Anisotropy")
+      Outputs(5)=(OutputName="EmissionColor")
+      Outputs(6)=(OutputName="SubsurfaceColor")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_0'"
+   NodePosX=400
+   NodePosY=416
+   NodeGuid=B1CB73B344C01B481E81599D9DB85AAD
+   CustomProperties Pin (PinId=A784E5924610492E05B5FF81407F63EE,PinName="FinalColor ( = float3(0.5f, 0.5f, 0.5f))",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,LinkedTo=(MaterialGraphNode_17 3CBD2C7A41C0916FABBB129115925674,),PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=2320992A42BFF29E9FE6ABBDECDA8DEB,PinName="InEmissiveColor ( = float3(0, 0, 0))",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=0D8E44AA413AA85E4EA7A8A4815FF363,PinName="SpecularIntensity ( = 0.5f)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=A5695496447AA21FA371DB85B50713A4,PinName="RoughnessIntensity ( = 0.5f)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=AD0756C741061B0A488CA98266A2B279,PinName="MainLightBrighterIntensity ( = 0)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=AE8AF04B4DA56CACF17577A6C623CC00,PinName="LightIntensity ( = 0)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=4B345C2F40930AA022BCF79879B2191A,PinName="LumenSpecIntensity ( = 0)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=D079B5334F691A07F7D3F9BA60215BF2,PinName="LumenDiffuseAOIntensity ( = 0)",PinType.PinCategory="required",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=FC4E54224EC9C9383E2B32AE66E1E7D9,PinName="BaseColor",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=2749AC3F4B0377E0CC59CF834807755B,PinName="Metallic",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=82524B3A4DECE3EB636CD69DC98C5361,PinName="Specular",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=245562A54B833EE11E88EFB917F2B6CD,PinName="Roughness",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=2C335B4240F3D7C3DF42C3BCDFB4ABBB,PinName="Anisotropy",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=0FE5247F473453C2D9364996DAA1E2D6,PinName="EmissionColor",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+   CustomProperties Pin (PinId=8E1C9DAF407F1D71A69D4FBA8DD12440,PinName="SubsurfaceColor",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`
+} />
+
+### Description des broches
+
+| Broche | Description | Plage |
+|--------|-------------|-------|
+| Color | Entrée de texture de couleur de base | RGB |
+| Data (6bit) | Paramètre de style (voir ci-dessous) | 0~1 |
+
+<Aside type="caution" title="Précision du paramètre Data">
+Comme Data utilise un encodage 6bit (précision ~0,016), il est recommandé d'utiliser des algorithmes de tramage (dithering) pour réduire les artefacts de banding de quantification.
+</Aside>
+
+### Valeurs recommandées des paramètres de style
+
+| Style | Data recommandé | Description |
+|-------|-----------------|-------------|
+| Style 1 (UE Native) | 0.5 | Pas d'effet spécial |
+| Style 2 (Smooth Toon) | 0.0~1.0 | Plus la valeur est élevée, plus les bords sont lisses |
+| Style 3 (Step Toon) | 0.0~1.0 | Plus la valeur est élevée, plus les transitions en paliers sont prononcées |
+| Style 4 (Retro-Ref) | 0.0~1.0 | Plus la valeur est élevée, plus le spéculaire est concentré |
+
+<Aside type="tip" title="Fragmentation des ombres Toon">
+Si les ombres de l'éclairage Toon semblent trop fragmentées, essayez d'augmenter le paramètre **Contact Shadow Distance** (distance d'ombre de contact) de la lumière principale. Une distance d'ombre de contact plus grande produit des bords d'ombre plus doux et plus continus.
+</Aside>
+
+## Personnalisation du Shader (Avancé)
+
+Lorsque les styles personnalisés sont activés, ERS copie les fichiers Shader du répertoire du plugin vers le répertoire de votre projet :
+
+```
+Project/Source/Shaders/ERS/LightStyle/
+└── LightStyleDeclare.ush
+```
+
+<Aside type="tip" title="Description du fichier">
+`LightStyleDeclare.ush` contient toutes les définitions de fonctions BxDF pour la commutation de style. Vous pouvez modifier ou réécrire la logique de calcul d'éclairage dans ce fichier.
+</Aside>
+
+### Signature de fonction et paramètres
+
+Chaque fonction BxDF de style a la signature suivante :
+
+```hlsl
+void BxDFStyleN(
+    FGBufferData GBuffer,  // Données GBuffer
+    half3 N,               // Normale en espace monde
+    half3 V,               // Direction de vue
+    float Falloff,         // Coefficient de fondu
+    half NoL,              // Produit scalaire de la normale et de la direction de la lumière
+    FAreaLight AreaLight,  // Données de la lumière
+    BxDFContext Context,   // Contexte de calcul auxiliaire
+    inout FDirectLighting Lighting,  // Résultat de l'éclairage en sortie
+    float Data             // Paramètre de style (0~1)
+);
+```
+
+### Membres importants de FGBufferData
+
+| Membre | Type | Description |
+|--------|------|-------------|
+| `WorldNormal` | `half3` | Normale en espace monde (normalisée) |
+| `DiffuseColor` | `half3` | Couleur diffuse (0~1) |
+| `SpecularColor` | `half3` | Couleur spéculaire (0~1) |
+| `BaseColor` | `half3` | Couleur de base |
+| `Metallic` | `half` | Métallique (0~1) |
+| `Roughness` | `half` | Rugosité (0~1) |
+| `Anisotropy` | `half` | Anisotropie (-1~1) |
+| `ShadingModelID` | `uint` | ID du modèle d'ombrage |
+
+<Aside type="note" title="Note de version">
+Les membres de la structure FGBufferData peuvent varier selon la version d'UE. Veuillez vous référer à votre version réelle du moteur pour la structure exacte.
+</Aside>
+
+### Membres importants de BxDFContext
+
+| Membre | Type | Description |
+|--------|------|-------------|
+| `NoV` | `half` | Cosinus de l'angle entre la normale et la vue |
+| `NoL` | `half` | Cosinus de l'angle entre la normale et la lumière |
+| `VoL` | `half` | Cosinus de l'angle entre la vue et la lumière |
+| `NoH` | `half` | Cosinus de l'angle entre la normale et le demi-vecteur |
+| `VoH` | `half` | Cosinus de l'angle entre la vue et le demi-vecteur |
+
+### Exemple de BxDF UE Native par défaut
+
+Ceci est l'implémentation par défaut du Style 1 (UE Native), diffus Lambert standard + spéculaire GGX :
+
+```hlsl
+void BxDFStyle1(FGBufferData GBuffer, half3 N, half3 V, float Falloff, 
+                half NoL, FAreaLight AreaLight, BxDFContext Context, 
+                inout FDirectLighting Lighting, float Data)
+{
+    // Diffuse
+    Lighting.Diffuse = Diffuse_Lambert(GBuffer.DiffuseColor);
+    Lighting.Diffuse *= AreaLight.FalloffColor * (Falloff * NoL);
+
+    // Spéculaire
+    if (IsRectLight(AreaLight))
+    {
+        Lighting.Specular = RectGGXApproxLTC(GBuffer.Roughness, GBuffer.SpecularColor, 
+                                             N, V, AreaLight.Rect, AreaLight.Texture);
+    }
+    else
+    {
+        Lighting.Specular = AreaLight.FalloffColor * (Falloff * NoL) 
+                         * SpecularGGX(GBuffer.Roughness, GBuffer.SpecularColor, 
+                                       Context, NoL, AreaLight);
+    }
+}
+```
+
+### Implémentation de référence Toon BxDF intégrée
+
+Le code suivant est l'implémentation du style Toon intégré du plugin, pour votre référence et personnalisation :
+
+```hlsl
+// Implémentation de référence Toon BxDF
+void BxDFStyleToon(FGBufferData GBuffer, half3 N, half3 V, float Falloff, 
+                   half NoL, FAreaLight AreaLight, BxDFContext Context, 
+                   inout FDirectLighting Lighting, float Data)
+{
+    // Le paramètre Data contrôle la douceur (0~1)
+    float ToonThreshold = 0.5f;
+    float ToonSmoothness = Data;
+
+    // Calculer le diffus Toon
+    float ToonNoL = smoothstep(ToonThreshold - ToonSmoothness, 
+                               ToonThreshold + ToonSmoothness, NoL);
+
+    Lighting.Diffuse = Diffuse_Lambert(GBuffer.DiffuseColor);
+    Lighting.Diffuse *= smoothstep(ToonThreshold - ToonSmoothness, 
+                                   ToonThreshold + ToonSmoothness, 
+                                   AreaLight.FalloffColor) * (Falloff * ToonNoL);
+
+    // Spéculaire Toon
+    if (IsRectLight(AreaLight))
+    {
+        Lighting.Specular = RectGGXApproxLTC(GBuffer.Roughness, GBuffer.SpecularColor, 
+                                             N, V, AreaLight.Rect, AreaLight.Texture);
+        Lighting.Specular *= ToonNoL;
+    }
+    else
+    {
+        float SpecularSize = 1.0 - GBuffer.Roughness;
+        float SpecThreshold = pow(Context.NoH, 100.0 * SpecularSize * SpecularSize);
+        float ToonSpecular = smoothstep(0.5 - ToonSmoothness, 
+                                        0.5 + ToonSmoothness, SpecThreshold);
+
+        Lighting.Specular = AreaLight.FalloffColor * (Falloff * ToonSpecular) 
+                          * GBuffer.SpecularColor;
+    }
+}
+```
+
+### Guide de personnalisation
+
+#### 1. Ajuster le seuil diffus
+
+Modifier `ToonThreshold` change la position du bord de l'ombre :
+
+```hlsl
+// Seuil plus bas : ombres plus sombres, transition plus précoce
+float ToonThreshold = 0.3f;
+
+// Seuil plus élevé : ombres plus claires, transition plus tardive
+float ToonThreshold = 0.7f;
+```
+
+#### 2. Ajuster la plage de transition douce
+
+Le deuxième paramètre de `smoothstep` contrôle la plage de lissage :
+
+```hlsl
+// Plage de lissage plus petite : bords plus durs
+float ToonSmoothness = Data * 0.1f;  // Bords nets
+
+// Plage de lissage plus grande : bords plus doux
+float ToonSmoothness = Data * 0.4f;  // Transition douce
+```
+
+#### 3. Personnaliser la forme spéculaire
+
+Modifier l'exposant de `SpecThreshold` change la forme spéculaire :
+
+```hlsl
+// Exposant plus élevé : spéculaire plus concentré, plus petit
+float SpecThreshold = pow(Context.NoH, 200.0 * SpecularSize * SpecularSize);
+
+// Exposant plus bas : spéculaire plus grand, plus étalé
+float SpecThreshold = pow(Context.NoH, 20.0 * SpecularSize * SpecularSize);
+```

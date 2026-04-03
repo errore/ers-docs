@@ -80,6 +80,25 @@ export default defineConfig({
           'zh-cn': '常见问题',
           'fr': 'FAQ',
         },
+      },
+      {
+        label: '更新日志',
+        link: '/changelog/',
+        translations: {
+          'en': 'Changelog',
+          'zh-cn': '更新日志',
+          'fr': 'Journal des modifications',
+        },
+      },
+      {
+        label: '路线图',
+        link: 'https://github.com/users/errore/projects/1',
+        translations: {
+          'en': 'Roadmap',
+          'zh-cn': '路线图',
+          'fr': 'Feuille de route',
+        },
+        
       }
     ],
     plugins: [
@@ -114,7 +133,7 @@ export default defineConfig({
       },
     }
   }), react()],
-  output: 'server',
+  output: 'static',
   adapter: cloudflare(),
   trailingSlash: 'always',
   build: {

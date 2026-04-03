@@ -1,0 +1,136 @@
+---
+title: ERS 更新历史
+---
+
+import { Card } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+## 更新日志
+
+<Card title="v1.4.0 - 2026-04-01 | 延迟风格自定义更新" >
+
+<details>
+<summary>查看更新详情</summary>
+
+#### ⚠️ BREAKING CHANGES
+
+##### 延迟光照主/附光源分离控制
+
+- 主光源（Main Light）和附加光源（Other Light）在延迟渲染路径下现在可以独立控制
+- 此变更可能影响现有项目中使用自定义光照逻辑的材质
+
+<Aside type="caution">
+**升级后建议**：检查光照叠加效果，可能需要微调强度参数
+</Aside>
+
+---
+
+#### ✨ New Features
+
+##### 自定义风格配置系统
+
+- 支持在 Project Settings 中自定义 4 个渲染风格的显示名称
+- 配置路径：`Edit → Project Settings → Plugins → Enhanced Rendering Solution`
+- 需要重启编辑器生效
+- 详细说明请参阅 [自定义风格配置](/zh-cn/advanced/custom-style-config/) 页面
+
+---
+
+#### 🔧 Improvements
+
+##### 品牌升级
+
+- 插件正式更名为 **Enhanced Rendering Solution**（缩写保持 ERS 不变）
+- 所有文档和 UI 中的品牌标识已同步更新
+
+</details>
+
+</Card>
+
+<Card title="v1.3.3 2026-03-09 | UE5.4~5.5 适配更新">
+
+<details>
+<summary>查看更新详情</summary>
+
+#### 🚀 New Features
+
+##### 多版本 Unreal Engine 支持
+
+- 新增支持 UE 5.4、UE 5.5
+- 同步 UE 5.7.3 代码库以提高稳定性
+
+---
+
+#### 🔄 路线图更新与优先级调整
+
+根据社区反馈，我正在调整开发优先级以解决一个高度请求的功能。多名用户要求在延迟渲染中扩展光照风格控制，具体要求在当前软过渡默认值之外提供更多选项。前向渲染已通过专用节点提供完整的光照/阴影分离功能。
+
+**新优先级：**
+
+- ✅ 已交付：UE 5.4 & 5.5 支持
+- 🔄 下一项：风格化延迟渲染研究 - 研究和实现立即开始
+- 📱 稍后：移动端支持（由于多版本维护开销增加，延至 4 月底）
+
+**价格更新：** 如前所述，当移动端支持上线时，插件价格将上涨 $10。所有现有用户无需额外费用即可获得所有未来更新。
+
+完整路线图请访问 [GitHub](https://github.com/users/errore/projects/1)
+
+</details>
+
+</Card>
+
+<Card title="v1.3.0 2026-01-23 | Fab Initial Release">
+
+<details>
+<summary>查看更新详情</summary>
+
+#### 🚀 New Features
+
+##### ERS 正式插件化
+
+- 插件正式发布至 Unreal Engine Marketplace（Fab）
+- 告别危险的引擎代码操作，改为标准的 UE 插件方式安装和管理
+- 插件可独立启用/禁用，无需额外的安装工具
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.2.0 2026-01-01 | 延迟渲染更新">
+
+<details>
+<summary>查看更新详情</summary>
+
+#### 🚀 New Features
+
+##### 延迟渲染支持
+
+- 新增延迟渲染路径支持
+- 支持在延迟渲染中混合灯光与 Lumen 全局光照
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.0.0 2025-12-13 | Initial Release">
+
+<details>
+<summary>查看更新详情</summary>
+
+#### 🚀 New Features
+
+##### 前向渲染基础功能
+
+- 仅支持前向渲染路径
+- 提供基础功能节点
+- 通过安装工具管理和替换引擎文件
+
+---
+
+</details>
+
+</Card>

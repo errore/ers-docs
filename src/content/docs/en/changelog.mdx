@@ -1,0 +1,137 @@
+---
+title: Changelog
+description: ERS changelog
+---
+
+import { Card } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+## Changelog
+
+<Card title="v1.4.0 - 2026-04-01 | Deferred Style Customization Update">
+
+<details>
+<summary>View Update Details</summary>
+
+#### ⚠️ BREAKING CHANGES
+
+##### Deferred Main/Auxiliary Light Separation Control
+
+- Main Light and Other Light can now be independently controlled in the deferred rendering path
+- This change may affect materials using custom lighting logic in existing projects
+
+<Aside type="caution">
+**After upgrading**: Check lighting overlay effects, you may need to fine-tune intensity parameters
+</Aside>
+
+---
+
+#### ✨ New Features
+
+##### Custom Style Configuration System
+
+- Supports customizing display names for 4 rendering styles in Project Settings
+- Configuration path: `Edit → Project Settings → Plugins → Enhanced Rendering Solution`
+- Requires editor restart to take effect
+- See [Custom Style Configuration](/en/advanced/custom-style-config/) for detailed documentation
+
+---
+
+#### 🔧 Improvements
+
+##### Brand Upgrade
+
+- Plugin officially renamed to **Enhanced Rendering Solution** (abbreviation ERS unchanged)
+- All brand identifiers in documentation and UI have been synchronized
+
+</details>
+
+</Card>
+
+<Card title="v1.3.3 2026-03-09 | UE5.4~5.5 Compatibility Update">
+
+<details>
+<summary>View Update Details</summary>
+
+#### 🚀 New Features
+
+##### Multi-Version Unreal Engine Support
+
+- Added support for UE 5.4, UE 5.5
+- Synced UE 5.7.3 codebase for improved stability
+
+---
+
+#### 🔄 Roadmap Update & Priority Adjustment
+
+Based on community feedback, I'm adjusting development priorities to address a highly-requested feature. Several users have requested expanded lighting style control in deferred rendering, specifically requesting more options beyond the current soft transition defaults. Forward rendering already offers full light/shadow separation with dedicated nodes.
+
+**New priorities:**
+
+- ✅ Delivered: UE 5.4 & 5.5 support
+- 🔄 Next: Stylized deferred rendering research - research and implementation begins immediately
+- 📱 Later: Mobile support (extended to late April due to increased multi-version maintenance overhead)
+
+**Price update:** As previously communicated, plugin pricing will increase by $10 when mobile support launches. All current users receive all future updates at no additional cost.
+
+Full roadmap: [GitHub](https://github.com/users/errore/projects/1)
+
+</details>
+
+</Card>
+
+<Card title="v1.3.0 2026-01-23 | Fab Initial Release">
+
+<details>
+<summary>View Update Details</summary>
+
+#### 🚀 New Features
+
+##### ERS Official Pluginization
+
+- Plugin officially released on Unreal Engine Marketplace (Fab)
+- Goodbye to dangerous engine code operations, now using standard UE plugin installation and management
+- Plugin can be independently enabled/disabled, no separate installer needed
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.2.0 2026-01-01 | Deferred Rendering Update">
+
+<details>
+<summary>View Update Details</summary>
+
+#### 🚀 New Features
+
+##### Deferred Rendering Support
+
+- Added deferred rendering path support
+- Support for mixing lights with Lumen global illumination in deferred rendering
+
+---
+
+</details>
+
+</Card>
+
+<Card title="v1.0.0 2025-12-13 | Initial Release">
+
+<details>
+<summary>View Update Details</summary>
+
+#### 🚀 New Features
+
+##### Forward Rendering Basic Features
+
+- Forward rendering path only
+- Basic functional nodes provided
+- Engine file management and replacement via installer tool
+
+---
+
+</details>
+
+</Card>
