@@ -39,7 +39,7 @@
     "landing.style2Name": "Adjustable Smooth Toon",
     "landing.style2Desc": "Style Toon à lissage ajustable utilisant la transition smoothstep",
     "landing.style3Name": "1-5 Step Toon",
-    "landing.style3Desc": "Style Toon multi-niveaux avec anti-aliasing 1-5 niveaux",
+    "landing.style3Desc": "Style Toon multi-niveaux avec 1-5 paliers",
     "landing.style4Name": "Retro-Reflective",
     "landing.style4Desc": "Matériau rétro-réfléchissant pour panneaux et surfaces rétroréfléchissantes",
     "landing.customBxdfTitle": "Configurez votre propre BxDF",

@@ -39,7 +39,7 @@
     "landing.style2Name": "Adjustable Smooth Toon",
     "landing.style2Desc": "可调节平滑度的 Toon 风格，使用 smoothstep 过渡",
     "landing.style3Name": "1-5 Step Toon",
-    "landing.style3Desc": "多阶梯 Toon 风格，支持 1-5 级阶梯抗锯齿",
+    "landing.style3Desc": "多阶梯 Toon 风格，1-5 级阶梯",
     "landing.style4Name": "Retro-Reflective",
     "landing.style4Desc": "逆反射材质，用于制作标识和逆反射表面",
     "landing.customBxdfTitle": "配置您自己的 BxDF",
