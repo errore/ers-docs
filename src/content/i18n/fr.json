@@ -52,5 +52,16 @@
     "landing.fabStore": "Fab Store",
     "landing.deferredSectionTitle": "Rendu différé",
     "landing.forwardSectionTitle": "Rendu direct",
+    "landing.navDeferred": "Différé",
+    "landing.navForward": "Direct",
+    "landing.navMobile": "Mobile",
+    "landing.mobileSectionTitle": "Rendu mobile",
+    "landing.mobileTitle": "Rendu mobile",
+    "landing.mobileDesc": "ERS prend désormais en charge les plateformes mobiles avec des pipelines de rendu stylisé optimisés.",
+    "landing.mobileDownloadHint": "Testez ERS sur votre appareil mobile",
+    "landing.android": "Android",
+    "landing.vr": "VR",
+    "landing.ios": "iOS",
+    "landing.viewDocs": "Voir la documentation",
     "Uebp.copy": "Copiez les nœuds sélectionnés avec Ctrl + C et collez dans Unreal Engine"
 }

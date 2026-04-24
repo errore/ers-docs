@@ -52,5 +52,16 @@
     "landing.fabStore": "商店",
     "landing.deferredSectionTitle": "延迟渲染",
     "landing.forwardSectionTitle": "前向渲染",
+    "landing.navDeferred": "延迟渲染",
+    "landing.navForward": "前向渲染",
+    "landing.navMobile": "移动渲染",
+    "landing.mobileSectionTitle": "移动渲染",
+    "landing.mobileTitle": "移动渲染",
+    "landing.mobileDesc": "ERS 现已支持移动平台，提供优化的风格化渲染管线。",
+    "landing.mobileDownloadHint": "在您的移动设备上测试 ERS",
+    "landing.android": "Android",
+    "landing.vr": "VR",
+    "landing.ios": "iOS",
+    "landing.viewDocs": "查看文档",
     "Uebp.copy": "选中节点后可使用 Ctrl +  C  复制节点，然后粘贴到UE中"
 }

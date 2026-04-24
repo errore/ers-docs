@@ -52,5 +52,16 @@
     "landing.fabStore": "Fab Store",
     "landing.deferredSectionTitle": "Deferred Rendering",
     "landing.forwardSectionTitle": "Forward Rendering",
+    "landing.navDeferred": "Deferred",
+    "landing.navForward": "Forward",
+    "landing.navMobile": "Mobile",
+    "landing.mobileSectionTitle": "Mobile Rendering",
+    "landing.mobileTitle": "Mobile Rendering",
+    "landing.mobileDesc": "ERS now supports mobile platforms with optimized stylized rendering pipelines.",
+    "landing.mobileDownloadHint": "Test ERS on your mobile device",
+    "landing.android": "Android",
+    "landing.vr": "VR",
+    "landing.ios": "iOS",
+    "landing.viewDocs": "View Documentation",
     "Uebp.copy": "Copy selected node(s) with Ctrl +  C  and paste to Unreal Engine"
 }
