@@ -7,6 +7,48 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## 更新日志
 
+<Card title="v1.5.0 - 2026-04-29 | 移动支持更新" >
+
+<details>
+<summary>查看更新详情</summary>
+
+#### ✨ New Features
+
+##### 移动渲染管线支持
+
+- 新增移动渲染管线，专为移动平台设计的优化渲染解决方案
+- 采用前向渲染模式，实现高效的风格化渲染效果
+- 支持自定义 HLSL 着色器
+- 向量化的4光源处理，针对移动 GPU 优化
+
+##### 平台兼容性
+
+- **Android**: 支持 Android 8.0 (API Level 26) 及以上
+- **iOS**: 支持 iOS 15 及以上
+- **VR**: 已在 Pico 4U 上测试，理论支持所有 OpenXR 兼容的 VR 设备（如 Meta Quest 系列）
+
+##### 性能优化
+
+- 打包的数据结构，最小化带宽消耗
+- 实现 60 FPS 在主流设备上稳定运行
+- VR 设备支持90 FPS 目标帧率
+
+---
+
+#### 📚 Documentation
+
+- 新增 [移动渲染](/zh-cn/advanced/mobile/) 文档页面
+- 详细的移动端 HLSL 实现指南
+- 性能基准和优化建议
+
+<Aside type="tip">
+查看 [移动渲染文档](/zh-cn/advanced/mobile/) 了解更多详情，包括测试版本下载和自定义 HLSL 实现指南。
+</Aside>
+
+</details>
+
+</Card>
+
 <Card title="v1.4.0 - 2026-04-01 | 延迟风格自定义更新" >
 
 <details>

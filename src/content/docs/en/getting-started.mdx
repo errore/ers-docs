@@ -21,9 +21,16 @@ import {YouTube} from 'astro-lazy-youtube-embed';
 
 ## 1. What is ERS
 
-ERS (Enhanced Rendering Solution) can add lighting support to your Unlit materials, or use **forward rendering** mode to completely customize the appearance of your materials.
+ERS (Enhanced Rendering Solution) is a rendering enhancement plugin for Unreal Engine. It allows you to access or modify lighting data from within material blueprints, giving you greater freedom to customize various rendering styles.
 
-Since native rendering pipelines are used, ERS materials are compatible with most features in the engine, such as lightmaps, reflection captures, and post-processing effects.
+This means you can retain the clean and crisp look of Unlit materials while having full lighting, shadows, and even Lumen global illumination support.
+
+ERS supports three rendering pipelines: Deferred, Forward, and Mobile. You can freely choose based on your project needs.
+
+By directly modifying Unreal Engine's HLSL rendering pipeline, ERS does **not rely** on any Blueprint Actor components to run — you only need to implement it in material blueprints to support most rendering features.
+
+At the same time, ERS materials are compatible with most engine features, such as lightmaps, reflection captures, and post-processing effects.
+
 <CardGrid>
 <LinkCard
     title="FAB Store"
@@ -46,7 +53,7 @@ Since native rendering pipelines are used, ERS materials are compatible with mos
 
 2. Restart UE to make the changes take effect.
 
-2. ERS has been configured in your project, and you can now start using ERS to add lighting support to your Unlit materials 🥳!
+2. ERS has been configured in your project, and you can now freely customize your rendering styles in material blueprints 🥳!
 
 </Steps>
 

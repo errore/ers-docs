@@ -16,74 +16,37 @@ import ERSInstallerImg from './ERS_Installer.png'
 
 ## 1. ERS是什么
 
-Enhanced Rendering Solution (ERS) 可以为您的 Unlit 材质添加灯光支持，或是使用**前向渲染**模式来完全自定义您的材质外观。
+ERS (Enhanced Rendering Solution) 是一款面向 Unreal Engine 的渲染增强插件。它允许你直接在材质蓝图中访问或修改来自虚幻引擎的灯光数据，从而更加自由地定制各种渲染风格。
 
-由于使用了原生的渲染管线，ERS材质可以与引擎中的大多数功能兼容，例如光照贴图、反射捕捉和后期处理效果。
+这意味着你可以保留 Unlit 材质简洁清爽的外观，同时获得完整的光照、阴影，甚至 Lumen 全局光照的支持。
+
+ERS 支持三种渲染管线：延迟渲染、前向渲染和移动渲染。你可以根据项目需求自由选择。
+
+由于使用了直接修改虚幻引擎 HLSL 渲染管线的方式，ERS 并 **不依赖** 任何蓝图 Actor 组件来运行，只需在材质蓝图中实现便可支持大部分渲染特性。
+
+同时，ERS 材质可以与引擎中的大多数功能兼容，例如光照贴图、反射捕捉和后期处理效果。
 
 您可以在以下位置购买ERS:
-
-<CardGrid>
-<LinkCard
-    title="B站商店版(已下架)"
-    target="_blank"
-/>
 
 <LinkCard
     title="FAB商店版"
     href="https://www.fab.com/listings/b8cd33e0-1007-4aae-87c3-3d8039dc091b"
     target="_blank"
 />
-</CardGrid>
 
 ## 2. 如何安装ERS
 
 根据您的插件版本选择以下安装方式：
 
-<details>
-<summary>B站商店版</summary>
-<Steps>
-
-1. 启动ERS安装程序，选择要**安装的UE版本**，然后点击 `安装` 按钮。
-
-    <Image src={ERSInstallerImg} alt="ERS Installer" width="400" />
-    这会向UE引擎注入必要的ERS Shader文件，ERS安装程序会自动处理这些文件。
-    
-    在不启用ERS插件的情况下，您的UE引擎仍然可以正常工作。要想还原更改，只需点击ERS安装器中 `恢复` 按钮即可。
-
-2. 从压缩包将ERS插件拖动到您的**项目根目录**中。
-
-    现在您的项目结构应该如下所示：
-
-    <FileTree>
-
-    - 你的项目根目
-        - ...
-        - Plugins
-            - **ERS**
-                - ...
-        - ...
-
-    </FileTree>
-
-3. 启动您的UE项目，打开 `插件` 窗口，确保ERS插件已启用。
-
-4. ERS已经您的项目中完成配置，您现在可以开始使用ERS为您的Unlit材质添加灯光支持了🥳！
-
-</Steps>
-</details>
-
-<details>
-<summary>FAB商店版</summary>
 <Steps>
 
 1. 启动您的UE项目，打开 `插件` 窗口，确保ERS插件已启用。
 
 2. 重启UE项目。
 
-2. ERS已经您的项目中完成配置，您现在可以开始使用ERS为您的Unlit材质添加灯光支持了🥳！
+2. ERS 已经在您的项目中完成配置，您现在可以开始在材质蓝图中自由定制您的渲染风格了🥳！
 
 </Steps>
-</details>
 
 ## 3. 选择您要使用的UE渲染管线
 

@@ -1,0 +1,171 @@
+---
+title: 移动渲染
+description: 在移动平台上使用ERS进行风格化渲染
+sidebar:
+  order: 3
+  badge:
+    text: 更新
+    variant: caution
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+
+## 移动渲染概述
+
+ERS移动渲染是专为移动平台设计的优化渲染管线，采用前向渲染模式实现高效的**风格化渲染效果**。
+
+<Aside type="note">
+移动渲染**仅支持前向渲染模式**，无法在延迟渲染管线中使用。
+</Aside>
+
+### 核心特性
+
+- 针对移动GPU优化的向量化的4光源处理
+- 支持自定义HLSL着色器
+- 完整的风格化渲染支持（Toon PBR等）
+- 最小化带宽消耗的打包数据结构
+
+### 性能基准
+
+| 设备 | 帧率 | 备注 |
+|------|------|------|
+| iPhone 6s (A9) | 60 FPS | - |
+| Snapdragon 8 Gen 2 (Adreno 740) | 60 FPS | - |
+| Pico 4U (XR Gen 2) | 90 FPS | VR应用 |
+| Kirin 820 | 45-60 FPS | 受垂直同步限制 |
+
+<Aside type="caution" title="垂直同步限制">
+如果设备帧率被限制在特定数值（如45 FPS），可能是垂直同步（V-Sync）限制。在 `stat Unit` 图表中观察 Draw 指标，如果数值远小于 16ms，但是 Frame 时间偏大，说明GPU在等待垂直同步。此时可以尝试：
+  - 1.关闭垂直同步
+  - 2.改项目最大FPS设置（如改为无限制或更高数值）
+</Aside>
+
+### 平台支持
+
+**Android**: 
+- 最低支持 Android 8.0 (API Level 26)
+- 支持所有主流 Android 设备
+
+**iOS**: 
+- 最低支持iOS 15
+- 通过IPA签名安装（如AltStore）
+
+**VR**:
+- 已在 Pico 4U 及以上设备上测试
+- 理论上支持所有 OpenXR 兼容的 VR 设备（如 Meta Quest 系列）
+- 90 FPS 目标帧率
+
+<Aside type="tip">
+**调试技巧**: 四指点击屏幕可切换实时性能统计显示
+</Aside>
+
+## 下载测试版本
+
+访问测试版本下载页面获取最新的移动端测试构建：
+
+**[下载移动测试版本](https://drive.google.com/drive/folders/1lDtb6FvP201uyGKyIYbEW5mJ_0yI4MQx?usp=drive_link)**
+
+## 自定义HLSL
+
+在移动渲染中使用自定义HLSL时，系统提供了向量化的多光源处理接口。以下是 `GetOtherLightShading` 函数在移动端的实现要点：
+
+### 数据结构
+
+移动端使用打包的4光源数据结构以优化带宽：
+
+```hlsl
+float4 LDirX, LDirY, LDirZ;  // 4个光源方向的分量
+float4 LIntensity;            // 光照强度（已包含阴影*衰减）
+float4 MobileLightColorR;      // 多色光源R通道权重
+float4 MobileLightColorG;      // 多色光源G通道权重
+float4 MobileLightColorB;      // 多色光源B通道权重
+```
+
+### 核心计算流程
+
+#### 1. 基础向量计算
+
+```hlsl
+// 强制使用float精度以提升移动端性能
+float3 N_h = (float3)N;
+float3 V_h = (float3)V;
+
+// 计算4光源的NoL（向量化的点积）
+float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+float4 diffuse4 = NoL4 * 0.5h + 0.5h; // float-Lambert
+```
+
+#### 2. 高光向量计算
+
+```hlsl
+// 计算H向量并归一化
+float4 Hx = LDirX + V_h.x;
+float4 Hy = LDirY + V_h.y;
+float4 Hz = LDirZ + V_h.z;
+float4 InvLen = rsqrt(Hx * Hx + Hy * Hy + Hz * Hz + 0.0001h);
+Hx *= InvLen; Hy *= InvLen; Hz *= InvLen;
+
+// 计算HoN（高光基础项）
+float4 HoN4 = saturate(Hx * N_h.x + Hy * N_h.y + Hz * N_h.z);
+```
+
+#### 3. 高光计算
+
+```hlsl
+// 使用Smoothness控制高光锐度
+float specExp = max(0.05f, Smoothness) + 1.0h;
+float4 specular4 = pow(HoN4, specExp) * diffuse4;
+```
+
+#### 4. 最终合成
+
+```hlsl
+// 计算每光源的最终权重
+float4 combinedWeights = (diffuse4 + specular4) * LIntensity;
+
+// 多色光源合成（通过点积向量化求和）
+finalResult.r = dot(combinedWeights, MobileLightColorR);
+finalResult.g = dot(combinedWeights, MobileLightColorG);
+finalResult.b = dot(combinedWeights, MobileLightColorB);
+```
+
+### 性能优化要点
+
+1. **精度转换**: 使用 `(float3)` 强制转换确保移动GPU正确处理精度
+2. **向量运算**: 利用float4进行批量计算，减少指令数
+3. **避免分支**: 使用smoothstep等无分支函数
+4. **打包数据**: 多光源数据使用SIMD风格的打包存储
+
+<Aside type="caution" title="精度选择">
+在高端设备的 Vulkan API 下，half 精度可能存在溢出问题，导致部分灯光丢失。建议与 UE 官方代码风格统一，使用 `float` 类型以确保稳定性。
+</Aside>
+
+### 示例：SimpleToon移动端实现
+
+移动端的 `SimpleToon` 函数利用上述向量化计算实现高效的阶梯光照效果：
+
+```hlsl
+#if SHADING_PATH_MOBILE
+    // 向量化计算NoL
+    float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+    
+    // Toon阶梯化处理
+    float4 diffuseFactor = smoothstep(-TSmooth, TSmooth, NoL4);
+    float4 diffuse4 = diffuseFactor * LIntensity;
+    
+    // 高光也进行阶梯化
+    float4 specular4 = smoothstep(specEdge0, specEdge1, HoN4);
+    specular4 *= step(0.01h, diffuseFactor) * LIntensity;
+    
+    // 最终合成
+    float4 combinedWeights = diffuse4 + specular4;
+    lightResult.r += dot(combinedWeights, MobileLightColorR);
+    // ...
+#endif
+```
+
+## 相关文档
+
+- [前向渲染节点](../nodes/forward-nodes.mdx) - 了解更多前向渲染节点
+- [高级 - 自定义HLSL](./use-hlsl.mdx) - HLSL自定义教程

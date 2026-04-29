@@ -1,0 +1,171 @@
+---
+title: Mobile Rendering
+description: Using ERS for stylized rendering on mobile platforms
+sidebar:
+  order: 3
+  badge:
+    text: New
+    variant: caution
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+
+## Mobile Rendering Overview
+
+ERS mobile rendering is an optimized rendering pipeline designed for mobile platforms, using **forward rendering mode** to achieve efficient **stylized rendering effects**.
+
+<Aside type="note">
+Mobile rendering **only supports forward rendering mode** and cannot be used in deferred rendering pipelines.
+</Aside>
+
+### Core Features
+
+- Vectorized 4-light processing optimized for mobile GPUs
+- Custom HLSL shader support
+- Full stylized rendering support (Toon PBR, etc.)
+- Packed data structures to minimize bandwidth consumption
+
+### Performance Benchmarks
+
+| Device | Framerate | Notes |
+|--------|-----------|-------|
+| iPhone 6s (A9) | 60 FPS | - |
+| Snapdragon 8 Gen 2 (Adreno 740) | 60 FPS | - |
+| Pico 4U (XR Gen 2) | 90 FPS | VR application |
+| Kirin 820 | 45-60 FPS | V-Sync limited |
+
+<Aside type="caution" title="V-Sync Limitation">
+If your device is locked to a specific framerate (e.g., 45 FPS), it may be due to vertical synchronization (V-Sync). Check the Draw metric in `stat Unit` graph - if the value is much less than 16ms but the Frame time is large, the GPU is waiting for V-Sync. Try:
+- Disable V-Sync
+- Adjust project Max FPS setting (set to unlimited or higher)
+</Aside>
+
+### Platform Support
+
+**Android**: 
+- Minimum Android 8.0 (API Level 26)
+- Supports all major Android devices
+
+**iOS**: 
+- Minimum iOS 15 support
+- Sideload via IPA (e.g., AltStore)
+
+**VR**:
+- Tested on Pico 4U and above
+- Theoretically supports all OpenXR-compatible VR devices (e.g., Meta Quest series)
+- 90 FPS target framerate
+
+<Aside type="tip">
+**Debug Tip**: Tap screen with 4 fingers to toggle real-time stats display
+</Aside>
+
+## Download Test Builds
+
+Access the test build download page for the latest mobile test builds:
+
+**[Download Mobile Test Builds](https://drive.google.com/drive/folders/1lDtb6FvP201uyGKyIYbEW5mJ_0yI4MQx?usp=drive_link)**
+
+## Custom HLSL
+
+When using custom HLSL in mobile rendering, the system provides vectorized multi-light processing interfaces. Here are the key points of the `GetOtherLightShading` function implementation on mobile:
+
+### Data Structures
+
+Mobile uses packed 4-light data structures for bandwidth optimization:
+
+```hlsl
+float4 LDirX, LDirY, LDirZ;  // Direction components for 4 lights
+float4 LIntensity;            // Light intensity (Shadow * Attenuation already included)
+float4 MobileLightColorR;      // Multi-color light R channel weights
+float4 MobileLightColorG;      // Multi-color light G channel weights
+float4 MobileLightColorB;      // Multi-color light B channel weights
+```
+
+### Core Calculation Flow
+
+#### 1. Basic Vector Calculation
+
+```hlsl
+// Force float precision for mobile GPU correct handling
+float3 N_h = (float3)N;
+float3 V_h = (float3)V;
+
+// Compute NoL for 4 lights (vectorized dot product)
+float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+float4 diffuse4 = NoL4 * 0.5h + 0.5h; // float-Lambert
+```
+
+#### 2. Specular Vector Calculation
+
+```hlsl
+// Compute H vectors and normalize
+float4 Hx = LDirX + V_h.x;
+float4 Hy = LDirY + V_h.y;
+float4 Hz = LDirZ + V_h.z;
+float4 InvLen = rsqrt(Hx * Hx + Hy * Hy + Hz * Hz + 0.0001h);
+Hx *= InvLen; Hy *= InvLen; Hz *= InvLen;
+
+// Compute HoN (Specular term base)
+float4 HoN4 = saturate(Hx * N_h.x + Hy * N_h.y + Hz * N_h.z);
+```
+
+#### 3. Specular Calculation
+
+```hlsl
+// Use Smoothness to control specular sharpness
+float specExp = max(0.05f, Smoothness) + 1.0h;
+float4 specular4 = pow(HoN4, specExp) * diffuse4;
+```
+
+#### 4. Final Composition
+
+```hlsl
+// Compute final per-light contribution weights
+float4 combinedWeights = (diffuse4 + specular4) * LIntensity;
+
+// Multi-color composition (vectorized sum via dot product)
+finalResult.r = dot(combinedWeights, MobileLightColorR);
+finalResult.g = dot(combinedWeights, MobileLightColorG);
+finalResult.b = dot(combinedWeights, MobileLightColorB);
+```
+
+### Performance Optimization Points
+
+1. **Precision Conversion**: Use `(float3)` casting to ensure correct precision handling on mobile GPUs
+2. **Vector Operations**: Use float4 for batch calculations to reduce instruction count
+3. **Avoid Branches**: Use branch-free functions like smoothstep
+4. **Packed Data**: Multi-light data uses SIMD-style packed storage
+
+<Aside type="caution" title="Precision Selection">
+On high-end devices with Vulkan API, half precision may cause overflow issues leading to missing lights. For stability, use `float` types consistently with UE official code style.
+</Aside>
+
+### Example: SimpleToon Mobile Implementation
+
+The mobile `SimpleToon` function uses the above vectorized calculations for efficient stepped lighting:
+
+```hlsl
+#if SHADING_PATH_MOBILE
+    // Vectorized NoL calculation
+    float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+    
+    // Toon stepping process
+    float4 diffuseFactor = smoothstep(-TSmooth, TSmooth, NoL4);
+    float4 diffuse4 = diffuseFactor * LIntensity;
+    
+    // Specular also stepped
+    float4 specular4 = smoothstep(specEdge0, specEdge1, HoN4);
+    specular4 *= step(0.01h, diffuseFactor) * LIntensity;
+    
+    // Final composition
+    float4 combinedWeights = diffuse4 + specular4;
+    lightResult.r += dot(combinedWeights, MobileLightColorR);
+    // ...
+#endif
+```
+
+## Related Documentation
+
+- [Forward Rendering Nodes](../nodes/forward-nodes.mdx) - Learn more about forward rendering nodes
+- [Advanced - Custom HLSL](./use-hlsl.mdx) - HLSL customization tutorial

@@ -8,6 +8,48 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Journal des modifications
 
+<Card title="v1.5.0 - 2026-04-29 | Mise à jour du support mobile">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### ✨ Nouvelles fonctionnalités
+
+##### Support du pipeline de rendu mobile
+
+- Ajout du pipeline de rendu mobile, une solution de rendu optimisée conçue pour les plateformes mobiles
+- Utilise le mode de rendu direct pour obtenir des effets de rendu stylisés efficaces
+- Prend en charge les shaders HLSL personnalisés
+- Traitement vectorisé de 4 lumières optimisé pour les GPU mobiles
+
+##### Compatibilité des plateformes
+
+- **Android** : Prend en charge Android 8.0 (API Level 26) et supérieur
+- **iOS** : Prend en charge iOS 15 et supérieur
+- **VR** : Testé sur Pico 4U, prend théoriquement en charge tous les appareils VR compatibles OpenXR (ex : série Meta Quest)
+
+##### Optimisation des performances
+
+- Structures de données compressées pour minimiser la consommation de bande passante
+- 60 FPS stable sur les appareils grand public
+- Framerate cible de 90 FPS sur les appareils VR
+
+---
+
+#### 📚 Documentation
+
+- Ajout de la page de documentation [Rendu mobile](/fr/advanced/mobile/)
+- Guide d'implémentation HLSL mobile détaillé
+- Benchmarks de performance et recommandations d'optimisation
+
+<Aside type="tip">
+Consultez la [Documentation sur le rendu mobile](/fr/advanced/mobile/) pour plus de détails, y compris les téléchargements de builds de test et les guides d'implémentation HLSL personnalisés.
+</Aside>
+
+</details>
+
+</Card>
+
 <Card title="v1.4.0 - 2026-04-01 | Mise à jour de la personnalisation des styles différés">
 
 <details>

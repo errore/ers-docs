@@ -1,0 +1,171 @@
+---
+title: Rendu mobile
+description: Utilisation d'ERS pour le rendu stylisé sur mobile
+sidebar:
+  order: 3
+  badge:
+    text: Nouveau
+    variant: caution
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+
+## Vue d'ensemble du rendu mobile
+
+Le rendu mobile ERS est un pipeline de rendu optimisé conçu pour les plateformes mobiles, utilisant le **mode de rendu direct** pour obtenir des **effets de rendu stylisé** efficaces.
+
+<Aside type="note">
+Le rendu mobile **supporte uniquement le mode de rendu direct** et ne peut pas être utilisé dans les pipelines de rendu différé.
+</Aside>
+
+### Fonctionnalités principales
+
+- Traitement vectorisé de 4 lumières optimisé pour les GPU mobiles
+- Support des shaders HLSL personnalisés
+- Support complet du rendu stylisé (Toon PBR, etc.)
+- Structures de données compressées pour minimiser la consommation de bande passante
+
+### Benchmarks de performance
+
+| Appareil | Framerate | Notes |
+|----------|-----------|-------|
+| iPhone 6s (A9) | 60 FPS | - |
+| Snapdragon 8 Gen 2 (Adreno 740) | 60 FPS | - |
+| Pico 4U (XR Gen 2) | 90 FPS | Application VR |
+| Kirin 820 | 45-60 FPS | Limité par V-Sync |
+
+<Aside type="caution" title="Limitation V-Sync">
+Si votre appareil est bloqué à un framerate spécifique (ex: 45 FPS), cela peut être dû à la synchronisation verticale (V-Sync). Vérifiez la métrique Draw dans le graphe `stat Unit` - si la valeur est bien inférieure à 16ms mais que le temps Frame est élevé, le GPU attend la V-Sync. Essayez:
+- Désactiver V-Sync
+- Ajuster le paramètre Max FPS du projet (mettre sans limite ou plus élevé)
+</Aside>
+
+### Support des plateformes
+
+**Android**: 
+- Minimum Android 8.0 (API Level 26)
+- Supporte tous les principaux appareils Android
+
+**iOS**: 
+- Support minimum iOS 15
+- Installation via IPA (ex: AltStore)
+
+**VR**:
+- Testé sur Pico 4U et supérieur
+- Théoriquement compatible avec tous les appareils VR compatibles OpenXR (ex: série Meta Quest)
+- Framerate cible 90 FPS
+
+<Aside type="tip">
+**Astuce de débogage**: Touchez l'écran avec 4 doigts pour basculer l'affichage des statistiques temps réel
+</Aside>
+
+## Télécharger les versions de test
+
+Accédez à la page de téléchargement des versions de test pour les dernières builds mobiles:
+
+**[Télécharger les builds de test mobile](https://drive.google.com/drive/folders/1lDtb6FvP201uyGKyIYbEW5mJ_0yI4MQx?usp=drive_link)**
+
+## HLSL personnalisé
+
+Lors de l'utilisation de HLSL personnalisé dans le rendu mobile, le système fournit des interfaces de traitement multi-lumières vectorisées. Voici les points clés de l'implémentation de la fonction `GetOtherLightShading` sur mobile:
+
+### Structures de données
+
+Le mobile utilise des structures de données 4 lumières compressées pour l'optimisation de la bande passante:
+
+```hlsl
+float4 LDirX, LDirY, LDirZ;  // Composantes de direction pour 4 lumières
+float4 LIntensity;            // Intensité lumineuse (Ombre * Atténuation déjà incluses)
+float4 MobileLightColorR;      // Poids du canal R des lumières multi-couleurs
+float4 MobileLightColorG;      // Poids du canal G des lumières multi-couleurs
+float4 MobileLightColorB;      // Poids du canal B des lumières multi-couleurs
+```
+
+### Flux de calcul principal
+
+#### 1. Calcul vectoriel de base
+
+```hlsl
+// Forcer la précision float pour une manipulation correcte sur GPU mobile
+float3 N_h = (float3)N;
+float3 V_h = (float3)V;
+
+// Calculer NoL pour 4 lumières (produit scalaire vectorisé)
+float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+float4 diffuse4 = NoL4 * 0.5h + 0.5h; // float-Lambert
+```
+
+#### 2. Calcul du vecteur spéculaire
+
+```hlsl
+// Calculer les vecteurs H et normaliser
+float4 Hx = LDirX + V_h.x;
+float4 Hy = LDirY + V_h.y;
+float4 Hz = LDirZ + V_h.z;
+float4 InvLen = rsqrt(Hx * Hx + Hy * Hy + Hz * Hz + 0.0001h);
+Hx *= InvLen; Hy *= InvLen; Hz *= InvLen;
+
+// Calculer HoN (terme de base spéculaire)
+float4 HoN4 = saturate(Hx * N_h.x + Hy * N_h.y + Hz * N_h.z);
+```
+
+#### 3. Calcul spéculaire
+
+```hlsl
+// Utiliser Smoothness pour contrôler la netteté spéculaire
+float specExp = max(0.05f, Smoothness) + 1.0h;
+float4 specular4 = pow(HoN4, specExp) * diffuse4;
+```
+
+#### 4. Composition finale
+
+```hlsl
+// Calculer les poids de contribution finaux par lumière
+float4 combinedWeights = (diffuse4 + specular4) * LIntensity;
+
+// Composition multi-couleur (somme vectorisée par produit scalaire)
+finalResult.r = dot(combinedWeights, MobileLightColorR);
+finalResult.g = dot(combinedWeights, MobileLightColorG);
+finalResult.b = dot(combinedWeights, MobileLightColorB);
+```
+
+### Points d'optimisation des performances
+
+1. **Conversion de précision**: Utiliser le cast `(float3)` pour assurer une manipulation correcte de la précision sur les GPU mobiles
+2. **Opérations vectorielles**: Utiliser float4 pour les calculs par lots afin de réduire le nombre d'instructions
+3. **Éviter les branchements**: Utiliser des fonctions sans branchement comme smoothstep
+4. **Données compressées**: Les données multi-lumières utilisent un stockage de style SIMD compressé
+
+<Aside type="caution" title="Sélection de précision">
+Sur les appareils haut de gamme avec API Vulkan, la précision half peut causer des problèmes de débordement entraînant des lumières manquantes. Pour la stabilité, utilisez le type `float` en cohérence avec le style de code officiel d'UE.
+</Aside>
+
+### Exemple: Implémentation mobile SimpleToon
+
+La fonction mobile `SimpleToon` utilise les calculs vectorisés ci-dessus pour un éclairage à paliers efficace:
+
+```hlsl
+#if SHADING_PATH_MOBILE
+    // Calcul vectorisé NoL
+    float4 NoL4 = LDirX * N_h.x + LDirY * N_h.y + LDirZ * N_h.z;
+    
+    // Traitement des paliers Toon
+    float4 diffuseFactor = smoothstep(-TSmooth, TSmooth, NoL4);
+    float4 diffuse4 = diffuseFactor * LIntensity;
+    
+    // Spéculaire également en paliers
+    float4 specular4 = smoothstep(specEdge0, specEdge1, HoN4);
+    specular4 *= step(0.01h, diffuseFactor) * LIntensity;
+    
+    // Composition finale
+    float4 combinedWeights = diffuse4 + specular4;
+    lightResult.r += dot(combinedWeights, MobileLightColorR);
+    // ...
+#endif
+```
+
+## Documentation associée
+
+- [Noeuds de rendu direct](../nodes/forward-nodes.mdx) - En savoir plus sur les noeuds de rendu direct
+- [Avancé - HLSL personnalisé](./use-hlsl.mdx) - Tutoriel de personnalisation HLSL

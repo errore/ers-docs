@@ -21,9 +21,16 @@ import {YouTube} from 'astro-lazy-youtube-embed';
 
 ## 1. Qu'est-ce que ERS
 
-ERS (Enhanced Rendering Solution) peut ajouter un support d'éclairage à vos matériaux Unlit, ou utiliser le mode de **rendu direct** pour personnaliser complètement l'apparence de vos matériaux.
+ERS (Enhanced Rendering Solution) est un plugin d'amélioration du rendu pour Unreal Engine. Il vous permet d'accéder ou de modifier les données d'éclairage directement depuis les blueprints de matériaux, vous offrant une plus grande liberté pour personnaliser différents styles de rendu.
 
-Comme les pipelines de rendu natifs sont utilisés, les matériaux ERS sont compatibles avec la plupart des fonctionnalités du moteur, telles que les lightmaps, les réflexions capturées et les effets de post-traitement.
+Cela signifie que vous pouvez conserver l'apparence nette et épurée des matériaux Unlit tout en profitant d'un éclairage complet, des ombres et même du support de l'illumination globale Lumen.
+
+ERS prend en charge trois pipelines de rendu : Deferred, Forward et Mobile. Vous pouvez choisir librement selon les besoins de votre projet.
+
+En modifiant directement le pipeline de rendu HLSL d'Unreal Engine, ERS ne dépend d'**aucun** composant Blueprint Actor pour fonctionner — vous devez uniquement l'implémenter dans les blueprints de matériaux pour prendre en charge la plupart des fonctionnalités de rendu.
+
+De plus, les matériaux ERS sont compatibles avec la plupart des fonctionnalités du moteur, telles que les lightmaps, les captures de réflexion et les effets de post-traitement.
+
 <CardGrid>
 <LinkCard
     title="FAB Store"
@@ -46,7 +53,7 @@ Comme les pipelines de rendu natifs sont utilisés, les matériaux ERS sont comp
 
 2. Redémarrez UE pour que les modifications prennent effet.
 
-2. ERS a été configuré dans votre projet, et vous pouvez maintenant commencer à utiliser ERS pour ajouter un support d'éclairage à vos matériaux Unlit 🥳 !
+2. ERS a été configuré dans votre projet, et vous pouvez maintenant personnaliser librement vos styles de rendu dans les blueprints de matériaux 🥳 !
 
 </Steps>
 

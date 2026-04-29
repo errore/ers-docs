@@ -73,15 +73,6 @@ export default defineConfig({
         },
       },
       {
-        label: '常见问题',
-        link: '/faq/',
-        translations: {
-          'en': 'FAQ',
-          'zh-cn': '常见问题',
-          'fr': 'FAQ',
-        },
-      },
-      {
         label: '更新日志',
         link: '/changelog/',
         translations: {
