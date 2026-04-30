@@ -1,4 +1,7 @@
 ---
+import "../styles/global.css";
+import "flag-icons/css/flag-icons.min.css";
+
 export function getStaticPaths() {
   return [
     { params: { lang: 'en' } },
@@ -6,7 +9,7 @@ export function getStaticPaths() {
     { params: { lang: 'zh-cn' } },
   ];
 }
-export const prerender = true;
+
 import IndexPage from './index.astro';
 ---
 <IndexPage />

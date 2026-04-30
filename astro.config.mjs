@@ -125,7 +125,9 @@ export default defineConfig({
     }
   }), react()],
   output: 'static',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    prerenderEnvironment: 'node',
+  }),
   trailingSlash: 'always',
   build: {
     format: 'directory',
