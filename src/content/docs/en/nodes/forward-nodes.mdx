@@ -19,7 +19,7 @@ ERS forward rendering provides various nodes to achieve custom rendering effects
 All forward rendering nodes must be used in forward rendering mode, otherwise errors will occur:
 
 ```
-Must be used in forward shading mode
+ERROR: This node requires forward shading mode
 ```
 ~So you can't brew coffee in a microwave~
 
@@ -55,7 +55,33 @@ The `GetGlobalLights` node is used to get global lighting information in the sce
 End Object
 `} />
 
-### 2. GetReflection Node (Get Reflection)
+### 2. GetBakedLightsOnly Node (Get Baked Lighting)
+
+The `GetBakedLightsOnly` node retrieves baked lighting information from the scene. When using static/stationary lighting, it outputs pure baked lighting contribution (excluding sky light and runtime indirect lighting).
+
+- **OutBakedLight**: Outputs baked lighting
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_4" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/MaterialFunctions/HLSL_Lib_GeneratedFunctions/GetBakedLightsOnly.GetBakedLightsOnly'"
+      FunctionOutputs(0)=(ExpressionOutputId=47333D7149EF924CA7240EB5E4C8FA51,Output=(OutputName="OutBakedLight"))
+      MaterialExpressionEditorX=-256
+      MaterialExpressionEditorY=512
+      MaterialExpressionGuid=D5B162E04E503CAA92BA908A008551CD
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.Lights'"
+      Outputs(0)=(OutputName="OutBakedLight")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_3'"
+   NodePosX=-256
+   NodePosY=512
+   NodeGuid=A17334FA467EE93849F5F89610E54DE9
+   CustomProperties Pin (PinId=B49C39E2413BC4427AD25B9B8BF6CA85,PinName="OutBakedLight",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 3. GetReflection Node (Get Reflection)
 
 The `GetReflection` node is used to get specular reflection information in the scene.
 
@@ -81,7 +107,7 @@ The `GetReflection` node is used to get specular reflection information in the s
 End Object
 `} />
 
-### 3. GetSSAO Node (Get Ambient Occlusion)
+### 4. GetSSAO Node (Get Ambient Occlusion)
 
 The `GetSSAO` node is used to get Screen Space Ambient Occlusion (SSAO) effect.
 
@@ -107,7 +133,7 @@ The `GetSSAO` node is used to get Screen Space Ambient Occlusion (SSAO) effect.
 End Object
 `} />
 
-### 4. GetMainLight Node (Get Main Light)
+### 5. GetMainLight Node (Get Main Light)
 
 The `GetMainLight` node gets main light information in the scene, including diffuse coefficient, specular coefficient, light color, attenuation and shadows.
 
@@ -149,7 +175,7 @@ The `GetMainLight` node gets main light information in the scene, including diff
 End Object
 `} />
 
-### 5. GetMainLightShading Node (Get Main Light Shading Result)
+### 6. GetMainLightShading Node (Get Main Light Shading Result)
 
 The `GetMainLightShading` node calculates the shading result of the main light.
 
@@ -178,7 +204,7 @@ The `GetMainLightShading` node calculates the shading result of the main light.
 End Object
 `} />
 
-### 6. GetMainLightShadow Node (Get Main Light Shadow)
+### 7. GetMainLightShadow Node (Get Main Light Shadow)
 
 The `GetMainLightShadow` node gets shadow information of the main light.
 
@@ -204,7 +230,7 @@ The `GetMainLightShadow` node gets shadow information of the main light.
 End Object
 `} />
 
-### 7. GetOtherLightShading Node (Get Other Light Shading Result)
+### 8. GetOtherLightShading Node (Get Other Light Shading Result)
 
 The `GetOtherLightShading` node calculates the shading result of other lights besides the main light.
 
@@ -233,7 +259,7 @@ The `GetOtherLightShading` node calculates the shading result of other lights be
 End Object
 `} />
 
-### 8. SimpleToon Node (Simple Toon Rendering)
+### 9. SimpleToon Node (Simple Toon Rendering)
 
 The `SimpleToon` node implements a simple toon rendering effect, controlling rim light and smoothness through parameters.
 
@@ -277,7 +303,7 @@ The `SimpleToon` node implements a simple toon rendering effect, controlling rim
 End Object
 `} />
 
-### 9. SimplePBR Node (Simple PBR Rendering)
+### 10. SimplePBR Node (Simple PBR Rendering)
 
 The `SimplePBR` node implements a simple physically-based rendering effect, calculating the rendering result based on material base color, roughness and metallic properties.
 

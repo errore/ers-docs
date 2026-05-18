@@ -19,7 +19,7 @@ Le rendu direct ERS fournit divers nœuds pour atteindre des effets de rendu per
 Tous les nœuds de rendu direct doivent être utilisés en mode de rendu direct, sinon des erreurs se produisent :
 
 ```
-Must be used in forward shading mode
+ERROR: This node requires forward shading mode
 ```
 ~Donc vous ne pouvez pas faire de café dans un micro-ondes~
 
@@ -55,7 +55,33 @@ Le nœud `GetGlobalLights` est utilisé pour obtenir les informations d'éclaira
 End Object
 `} />
 
-### 2. Nœud GetReflection (Obtenir la réflexion)
+### 2. Nœud GetBakedLightsOnly (Obtenir l'éclairage cuit)
+
+Le nœud `GetBakedLightsOnly` récupère les informations d'éclairage cuit de la scène. Lors de l'utilisation d'un éclairage static/stationary, il produit une contribution d'éclairage cuit pur (sans lumière ambiante ni éclairage indirect).
+
+- **OutBakedLight** : Sortie l'éclairage cuit
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_4" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/MaterialFunctions/HLSL_Lib_GeneratedFunctions/GetBakedLightsOnly.GetBakedLightsOnly'"
+      FunctionOutputs(0)=(ExpressionOutputId=47333D7149EF924CA7240EB5E4C8FA51,Output=(OutputName="OutBakedLight"))
+      MaterialExpressionEditorX=-256
+      MaterialExpressionEditorY=512
+      MaterialExpressionGuid=D5B162E04E503CAA92BA908A008551CD
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.Lights'"
+      Outputs(0)=(OutputName="OutBakedLight")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_3'"
+   NodePosX=-256
+   NodePosY=512
+   NodeGuid=A17334FA467EE93849F5F89610E54DE9
+   CustomProperties Pin (PinId=B49C39E2413BC4427AD25B9B8BF6CA85,PinName="OutBakedLight",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 3. Nœud GetReflection (Obtenir la réflexion)
 
 Le nœud `GetReflection` est utilisé pour obtenir les informations de réflexion spéculaire dans la scène.
 
@@ -81,7 +107,7 @@ Le nœud `GetReflection` est utilisé pour obtenir les informations de réflexio
 End Object
 `} />
 
-### 3. Nœud GetSSAO (Obtenir l'occlusion ambiante)
+### 4. Nœud GetSSAO (Obtenir l'occlusion ambiante)
 
 Le nœud `GetSSAO` est utilisé pour obtenir l'effet d'occlusion ambiante par écran (SSAO).
 
@@ -107,7 +133,7 @@ Le nœud `GetSSAO` est utilisé pour obtenir l'effet d'occlusion ambiante par é
 End Object
 `} />
 
-### 4. Nœud GetMainLight (Obtenir la lumière principale)
+### 5. Nœud GetMainLight (Obtenir la lumière principale)
 
 Le nœud `GetMainLight` obtient les informations de lumière principale dans la scène, y compris le coefficient diffus, le coefficient spéculaire, la couleur de la lumière, l'atténuation et les ombres.
 
@@ -149,7 +175,7 @@ Le nœud `GetMainLight` obtient les informations de lumière principale dans la 
 End Object
 `} />
 
-### 5. Nœud GetMainLightShading (Obtenir le résultat d'ombrage de la lumière principale)
+### 6. Nœud GetMainLightShading (Obtenir le résultat d'ombrage de la lumière principale)
 
 Le nœud `GetMainLightShading` calcule le résultat d'ombrage de la lumière principale.
 
@@ -178,7 +204,7 @@ Le nœud `GetMainLightShading` calcule le résultat d'ombrage de la lumière pri
 End Object
 `} />
 
-### 6. Nœud GetMainLightShadow (Obtenir l'ombre de la lumière principale)
+### 7. Nœud GetMainLightShadow (Obtenir l'ombre de la lumière principale)
 
 Le nœud `GetMainLightShadow` obtient les informations d'ombre de la lumière principale.
 
@@ -204,7 +230,7 @@ Le nœud `GetMainLightShadow` obtient les informations d'ombre de la lumière pr
 End Object
 `} />
 
-### 7. Nœud GetOtherLightShading (Obtenir le résultat d'ombrage des autres lumières)
+### 8. Nœud GetOtherLightShading (Obtenir le résultat d'ombrage des autres lumières)
 
 Le nœud `GetOtherLightShading` calcule le résultat d'ombrage des autres lumières en plus de la lumière principale.
 
@@ -233,7 +259,7 @@ Le nœud `GetOtherLightShading` calcule le résultat d'ombrage des autres lumiè
 End Object
 `} />
 
-### 8. Nœud SimpleToon (Rendu toon simple)
+### 9. Nœud SimpleToon (Rendu toon simple)
 
 Le nœud `SimpleToon` implémente un effet de rendu toon simple, contrôlant le rim light et le lissage através de paramètres.
 
@@ -277,7 +303,7 @@ Le nœud `SimpleToon` implémente un effet de rendu toon simple, contrôlant le 
 End Object
 `} />
 
-### 9. Nœud SimplePBR (Rendu PBR simple)
+### 10. Nœud SimplePBR (Rendu PBR simple)
 
 Le nœud `SimplePBR` implémente un effet de rendu physique simple, calculant le résultat du rendu en fonction de la couleur de base, de la rugosité et des propriétés métalliques du matériau.
 

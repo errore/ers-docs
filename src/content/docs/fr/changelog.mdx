@@ -8,6 +8,44 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Journal des modifications
 
+<Card title="v1.5.1 - 2026-05-18 | Sous-système d'éclairage cuit et compatibilité multi-version">
+
+<details>
+<summary>Voir les détails de la mise à jour</summary>
+
+#### ✨ Nouvelles fonctionnalités
+
+##### Sous-système d'éclairage cuit pur
+
+- Ajout des champs `BakedLightmapDiffuse` / `OutBakedLightmapOnly` pour extraire la contribution d'éclairage cuit pur (sans lumière ambiante ni éclairage indirect)
+- Accessible dans les matériaux Blueprint via `CustomLightPack.BakedLightmapDiffuse`
+- Couvre à la fois les plateformes Desktop (HQ/LQ lightmap) et Mobile
+
+---
+
+#### ⚡ Performance
+
+- Fusion de deux échantillonnages de lightmap en un seul appel de fonction `GetCustomPrecomputedLighting`
+- Capture les valeurs pures de la lightmap avant le calcul de la lumière ambiante, éliminant les surcoûts d'échantillonnage redondant
+- Adapté pour les plateformes Desktop et Mobile
+
+---
+
+#### 🔧 Corrections de bogues
+
+##### Crash avec les nœuds forward en rendu différé
+
+- Correction d'un problème où le moteur pouvait planter lors de l'utilisation de nœuds de rendu forward dans le pipeline de rendu différé
+
+##### Compatibilité multi-version de `StoreVirtualTextureFeedback`
+
+- Correction des erreurs de compilation de shaders causées par les différences de signature entre UE 5.4/5.5/5.6/5.7
+- Remerciements à **vorian** pour avoir signalé le problème de compilation sur UE 5.7
+
+</details>
+
+</Card>
+
 <Card title="v1.5.0 - 2026-05-01 | Mise à jour du support mobile">
 
 <details>

@@ -8,6 +8,44 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Changelog
 
+<Card title="v1.5.1 - 2026-05-18 | Baked Lighting Subsystem & Multi-Version Compatibility">
+
+<details>
+<summary>View Update Details</summary>
+
+#### ✨ New Features
+
+##### Pure Baked Lighting Subsystem
+
+- Added `BakedLightmapDiffuse` / `OutBakedLightmapOnly` fields to extract pure baked lighting contribution (excluding sky light and runtime indirect lighting)
+- Accessible in material blueprints via `CustomLightPack.BakedLightmapDiffuse`
+- Covers both Desktop (HQ/LQ lightmap) and Mobile platforms
+
+---
+
+#### ⚡ Performance
+
+- Merged dual lightmap sampling into a single `GetCustomPrecomputedLighting` function call
+- Captures pure lightmap values before sky light calculation, eliminating redundant sampling overhead
+- Adapted for both Desktop and Mobile platforms
+
+---
+
+#### 🔧 Bug Fixes
+
+##### Deferred Pipeline Forward Node Crash
+
+- Fixed an issue where the engine could crash when using forward rendering nodes in the deferred rendering pipeline
+
+##### Multi-Version `StoreVirtualTextureFeedback` Signature Compatibility
+
+- Fixed shader compilation errors caused by signature differences across UE 5.4/5.5/5.6/5.7
+- Special thanks to community member **vorian** for reporting the compilation issue on UE 5.7
+
+</details>
+
+</Card>
+
 <Card title="v1.5.0 - 2026-05-01 | Mobile Support Update">
 
 <details>

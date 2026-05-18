@@ -19,7 +19,7 @@ ERS的前向渲染提供了多种节点来实现定制化渲染效果。
 所有前向渲染节点都必须在前向渲染模式下使用，否则会产生错误:
 
 ```
-Must be used in forward shading mode
+ERROR: This node requires forward shading mode
 ```
 ~所以你没法在酒吧点炒饭~
 
@@ -55,7 +55,33 @@ Must be used in forward shading mode
 End Object
 `} />
 
-### 2. GetReflection节点（获取反射）
+### 2. GetBakedLightsOnly节点（获取烘培光照）
+
+`GetBakedLightsOnly` 节点用于获取场景中的烘培光照信息。当使用静态/Stationary 光照时，它输出纯烘培光照贡献（不包含天光和运行时间接光照）。
+
+- **OutBakedLight**: 输出烘培光照
+
+<Uebp height="200px" blueprintData={`Begin Object Class=/Script/UnrealEd.MaterialGraphNode Name="MaterialGraphNode_4" ExportPath="/Script/UnrealEd.MaterialGraphNode'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4'"
+   Begin Object Class=/Script/Engine.MaterialExpressionMaterialFunctionCall Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+   End Object
+   Begin Object Name="MaterialExpressionMaterialFunctionCall_3" ExportPath="/Script/Engine.MaterialExpressionMaterialFunctionCall'/Engine/Transient.Lights:MaterialGraph_0.MaterialGraphNode_4.MaterialExpressionMaterialFunctionCall_3'"
+      MaterialFunction="/Script/Engine.MaterialFunction'/ERS/MaterialFunctions/HLSL_Lib_GeneratedFunctions/GetBakedLightsOnly.GetBakedLightsOnly'"
+      FunctionOutputs(0)=(ExpressionOutputId=47333D7149EF924CA7240EB5E4C8FA51,Output=(OutputName="OutBakedLight"))
+      MaterialExpressionEditorX=-256
+      MaterialExpressionEditorY=512
+      MaterialExpressionGuid=D5B162E04E503CAA92BA908A008551CD
+      Material="/Script/UnrealEd.PreviewMaterial'/Engine/Transient.Lights'"
+      Outputs(0)=(OutputName="OutBakedLight")
+   End Object
+   MaterialExpression="/Script/Engine.MaterialExpressionMaterialFunctionCall'MaterialExpressionMaterialFunctionCall_3'"
+   NodePosX=-256
+   NodePosY=512
+   NodeGuid=A17334FA467EE93849F5F89610E54DE9
+   CustomProperties Pin (PinId=B49C39E2413BC4427AD25B9B8BF6CA85,PinName="OutBakedLight",Direction="EGPD_Output",PinType.PinCategory="",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+End Object
+`} />
+
+### 3. GetReflection节点（获取反射）
 
 `GetReflection` 节点用于获取场景中的镜面反射信息。
 
@@ -81,7 +107,7 @@ End Object
 End Object
 `} />
 
-### 3. GetSSAO节点（获取环境光遮蔽）
+### 4. GetSSAO节点（获取环境光遮蔽）
 
 `GetSSAO` 节点用于获取屏幕空间环境光遮蔽(SSAO)效果。
 
@@ -107,7 +133,7 @@ End Object
 End Object
 `} />
 
-### 4. GetMainLight节点（获取主光源）
+### 5. GetMainLight节点（获取主光源）
 
 `GetMainLight` 节点获取场景中的主光源信息，包括漫反射系数、高光系数、光源颜色、衰减和阴影。
 
@@ -149,7 +175,7 @@ End Object
 End Object
 `} />
 
-### 5. GetMainLightShading节点（获取主光渲染结果）
+### 6. GetMainLightShading节点（获取主光渲染结果）
 
 `GetMainLightShading` 节点计算主光源的渲染结果。
 
@@ -178,7 +204,7 @@ End Object
 End Object
 `} />
 
-### 6. GetMainLightShadow节点（获取主光阴影）
+### 7. GetMainLightShadow节点（获取主光阴影）
 
 `GetMainLightShadow` 节点获取主光源的阴影信息。
 
@@ -204,7 +230,7 @@ End Object
 End Object
 `} />
 
-### 7. GetOtherLightShading节点（获取其他光源渲染结果）
+### 8. GetOtherLightShading节点（获取其他光源渲染结果）
 
 `GetOtherLightShading` 节点计算除主光源外的其他光源的渲染结果。
 
@@ -233,7 +259,7 @@ End Object
 End Object
 `} />
 
-### 8. SimpleToon节点（简单卡通渲染）
+### 9. SimpleToon节点（简单卡通渲染）
 
 `SimpleToon` 节点实现了一个简单的卡通渲染效果，通过参数控制边缘光和光滑度。
 
@@ -277,7 +303,7 @@ End Object
 End Object
 `} />
 
-### 9. SimplePBR节点（简单PBR渲染）
+### 10. SimplePBR节点（简单PBR渲染）
 
 `SimplePBR` 节点实现了一个简单的物理基础渲染效果，基于材质的基色、粗糙度和金属度计算渲染结果。
 

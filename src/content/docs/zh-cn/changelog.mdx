@@ -7,6 +7,44 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## 更新日志
 
+<Card title="v1.5.1 - 2026-05-18 | 烘培光照子系统和多版本兼容性更新" >
+
+<details>
+<summary>查看更新详情</summary>
+
+#### ✨ New Features
+
+##### 纯净烘培光照子系统
+
+- 新增 `BakedLightmapDiffuse` / `OutBakedLightmapOnly` 字段，支持提取纯净烘培光照贡献（不包含天光和运行时间接光照）
+- 在材质蓝图中可通过 `CustomLightPack.BakedLightmapDiffuse` 访问烘培值
+- 覆盖 Desktop（HQ/LQ 光贴图）和 Mobile 双平台
+
+---
+
+#### ⚡ Performance
+
+- 合并双次光贴图采样为单次 `GetCustomPrecomputedLighting` 函数调用
+- 在天空光计算之前捕获纯净光贴图值，避免重复采样开销
+- 适配 Desktop 和 Mobile 双平台
+
+---
+
+#### 🔧 Bug Fixes
+
+##### 延迟渲染使用前向节点崩溃修复
+
+- 修复在延迟渲染管线中使用前向渲染节点时，引擎有几率崩溃的问题
+
+##### 多版本 `StoreVirtualTextureFeedback` 函数签名兼容
+
+- 修复 UE 5.4/5.5/5.6/5.7 之间该函数签名差异导致的着色器编译错误
+- 感谢社区用户 **vorian** 反馈 UE 5.7 上的编译问题
+
+</details>
+
+</Card>
+
 <Card title="v1.5.0 - 2026-05-01 | 移动支持更新" >
 
 <details>
