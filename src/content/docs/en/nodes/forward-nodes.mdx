@@ -16,6 +16,12 @@ To use forward rendering, search for `forward` in Project Settings and enable th
 
 ERS forward rendering provides various nodes to achieve custom rendering effects.
 
+<Aside type="caution">
+
+When using ERS forward rendering, you need to work with the material blueprint like an **Unlit** material. Among all color outputs, only the **Emissive Color** pin is available.
+
+</Aside>
+
 All forward rendering nodes must be used in forward rendering mode, otherwise errors will occur:
 
 ```

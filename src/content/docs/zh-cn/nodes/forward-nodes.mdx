@@ -16,6 +16,12 @@ import { Aside } from '@astrojs/starlight/components';
 
 ERS的前向渲染提供了多种节点来实现定制化渲染效果。
 
+<Aside type="caution">
+
+使用ERS前向渲染时，你需要像 **Unlit** 材质一样使用蓝图，所有颜色输出中，只有**自发光**接口（pin）可用。
+
+</Aside>
+
 所有前向渲染节点都必须在前向渲染模式下使用，否则会产生错误:
 
 ```

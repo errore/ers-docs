@@ -7,6 +7,32 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## 更新日志
 
+<Card title="v1.5.2 - 2026-06-18 | 前向渲染增强与宏注入更新" >
+
+<details>
+<summary>查看更新详情</summary>
+
+#### 🔧 Bug Fixes
+
+##### `GetMainLightShading` / `GetOtherLightShading` 节点 Smoothness 修复
+
+- 修复了 `GetMainLightShading`、`GetOtherLightShading` 等光照计算节点中 Smoothness（光滑度）参数不起作用的问题
+- Smoothness = 0 → 指数 1（完全粗糙），Smoothness = 1 → 指数 2048（镜面高光）
+
+---
+
+#### ✨ 新功能
+
+##### 前向渲染宏注入系统
+
+- 为 ERS 前向渲染管线添加宏注入功能
+- ERS 前向渲染不再占用 **Subsurface**（次表面）材质域，避免与其他材质效果冲突
+- 当材质蓝图内存在连接到输出的 ERS 节点时，ERS 渲染自动接管材质蓝图
+
+</details>
+
+</Card>
+
 <Card title="v1.5.1 - 2026-05-18 | 烘培光照子系统和多版本兼容性更新" >
 
 <details>

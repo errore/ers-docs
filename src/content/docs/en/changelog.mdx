@@ -8,6 +8,32 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Changelog
 
+<Card title="v1.5.2 - 2026-06-18 | Forward Rendering Enhancement & Macro Injection">
+
+<details>
+<summary>View Update Details</summary>
+
+#### 🔧 Bug Fixes
+
+##### `GetMainLightShading` / `GetOtherLightShading` Smoothness Fix
+
+- Fixed the issue where the Smoothness parameter was not taking effect in `GetMainLightShading`, `GetOtherLightShading`, and other lighting computation nodes
+- Smoothness = 0 → exponent 1 (fully rough), Smoothness = 1 → exponent 2048 (mirror-like specular)
+
+---
+
+#### ✨ New Features
+
+##### Forward Rendering Macro Injection System
+
+- Added macro injection support for ERS forward rendering pipeline
+- ERS forward rendering no longer occupies the **Subsurface** material domain, avoiding conflicts with other material effects
+- When an ERS node connected to an output exists in the material blueprint, ERS rendering automatically takes over the material blueprint
+
+</details>
+
+</Card>
+
 <Card title="v1.5.1 - 2026-05-18 | Baked Lighting Subsystem & Multi-Version Compatibility">
 
 <details>
